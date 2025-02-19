@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\Solucion\Cotizador\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\..\Solucion\Cotizador\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>
+    </SchemaVersion>
+    <ProjectGuid>{180500E7-76C8-429F-A234-8C0AD4109746}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Web_Cliente</RootNamespace>
+    <AssemblyName>Web Cliente</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <MyType>Custom</MyType>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44378</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>Web Cliente.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>Web Cliente.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\Microsoft.Bcl.AsyncInterfaces.9.0.1\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.IO.Pipelines, Version=9.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\System.IO.Pipelines.9.0.1\lib\net462\System.IO.Pipelines.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\System.Text.Encodings.Web.9.0.1\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\System.Text.Json.9.0.1\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\Solucion\Cotizador\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\..\Solucion\Cotizador\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Collections.Specialized" />
+    <Import Include="System.Configuration" />
+    <Import Include="System.Text" />
+    <Import Include="System.Text.RegularExpressions" />
+    <Import Include="System.Web" />
+    <Import Include="System.Web.Caching" />
+    <Import Include="System.Web.SessionState" />
+    <Import Include="System.Web.Security" />
+    <Import Include="System.Web.Profile" />
+    <Import Include="System.Web.UI" />
+    <Import Include="System.Web.UI.WebControls" />
+    <Import Include="System.Web.UI.WebControls.WebParts" />
+    <Import Include="System.Web.UI.HtmlControls" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Archivos\Igss_Isr.xml" />
+    <Content Include="Archivos\PlazoMeses_TipoGarantia.xml" />
+    <Content Include="Archivos\PlazoTasaPromedio_TipoDeuda.xml" />
+    <Content Include="Archivos\PolizaSeguro.xml" />
+    <Content Include="Archivos\TasaInteres_DestinoCredito.xml" />
+    <Content Include="bin\Web Cliente.dll" />
+    <Content Include="bin\Web Cliente.pdb" />
+    <Content Include="Cotizador\PrecalificacionCreditos.asmx" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MasterPage.Master.designer.vb">
+      <DependentUpon>MasterPage.Master</DependentUpon>
+    </Compile>
+    <Compile Include="MasterPage.Master.vb">
+      <DependentUpon>MasterPage.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\MyExtensions\MyWebExtension.vb">
+      <VBMyExtensionTemplateID>Microsoft.VisualBasic.Web.MyExtension</VBMyExtensionTemplateID>
+      <VBMyExtensionTemplateVersion>1.0.0.0</VBMyExtensionTemplateVersion>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Cotizador\PrecalificacionCreditos.asmx.vb">
+      <DependentUpon>PrecalificacionCreditos.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MasterPage.Master" />
+    <Content Include="Archivos\Logs\03-02-2025 11.12.15.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.20.24.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.22.01.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.22.11.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.22.19.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.22.24.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.22.34.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.22.42.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.30.12.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.35.23.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.35.31.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.44.24.log" />
+    <Content Include="Archivos\Logs\03-02-2025 11.45.01.log" />
+    <Content Include="Archivos\Logs\04-02-2025 09.25.44.log" />
+    <Content Include="Archivos\Logs\04-02-2025 09.25.52.log" />
+    <Content Include="Archivos\Logs\04-02-2025 09.26.03.log" />
+    <Content Include="Archivos\Logs\04-02-2025 09.26.10.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.06.49.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.06.57.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.07.03.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.07.11.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.18.38.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.30.35.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.31.10.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.32.44.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.33.28.log" />
+    <Content Include="Archivos\Logs\04-02-2025 10.50.17.log" />
+    <Content Include="Archivos\Logs\04-02-2025 12.11.18.log" />
+    <Content Include="Archivos\Logs\04-02-2025 12.26.33.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.17.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.21.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.23.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.25.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.28.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.32.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.35.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.38.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.40.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.44.44.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.45.01.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.45.06.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.45.14.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.45.18.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.45.25.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.45.28.log" />
+    <Content Include="Archivos\Logs\04-02-2025 15.45.38.log" />
+    <Content Include="Archivos\Logs\04-02-2025 16.14.27.log" />
+    <Content Include="Archivos\Logs\04-02-2025 16.14.37.log" />
+    <Content Include="Archivos\Logs\04-02-2025 16.14.58.log" />
+    <Content Include="Archivos\Logs\14-02-2025 12.52.47.log" />
+    <Content Include="Archivos\Logs\23-01-2025 12.09.52.log" />
+    <Content Include="Archivos\Logs\23-01-2025 12.26.44.log" />
+    <Content Include="Archivos\Logs\23-01-2025 15.08.39.log" />
+    <Content Include="Archivos\Logs\23-01-2025 15.11.14.log" />
+    <Content Include="Archivos\Logs\23-01-2025 15.27.13.log" />
+    <Content Include="Archivos\Logs\23-01-2025 15.28.31.log" />
+    <Content Include="Archivos\Logs\23-01-2025 15.32.46.log" />
+    <Content Include="Archivos\Logs\23-01-2025 15.35.04.log" />
+    <Content Include="Archivos\Logs\23-01-2025 15.43.34.log" />
+    <Content Include="Archivos\Logs\23-01-2025 16.04.26.log" />
+    <Content Include="Archivos\Logs\23-01-2025 16.51.57.log" />
+    <Content Include="Archivos\Logs\24-01-2025 08.55.34.log" />
+    <Content Include="Archivos\Logs\24-01-2025 11.07.56.log" />
+    <Content Include="Archivos\Logs\24-01-2025 11.43.25.log" />
+    <Content Include="Archivos\Logs\27-01-2025 09.01.57.log" />
+    <Content Include="Archivos\Logs\27-01-2025 16.02.02.log" />
+    <Content Include="Archivos\Logs\28-01-2025 12.55.03.log" />
+    <Content Include="Archivos\Logs\28-01-2025 12.55.37.log" />
+    <Content Include="Archivos\Logs\28-01-2025 12.55.51.log" />
+    <Content Include="Archivos\Logs\28-01-2025 13.06.01.log" />
+    <Content Include="Archivos\Logs\28-01-2025 13.08.42.log" />
+    <Content Include="Archivos\Logs\28-01-2025 13.09.05.log" />
+    <Content Include="Archivos\Logs\28-01-2025 13.35.36.log" />
+    <Content Include="Archivos\Logs\28-01-2025 13.37.21.log" />
+    <Content Include="Archivos\Logs\28-01-2025 13.39.44.log" />
+    <Content Include="Archivos\Logs\28-01-2025 13.41.58.log" />
+    <Content Include="Archivos\Logs\28-01-2025 14.38.09.log" />
+    <Content Include="Archivos\Logs\28-01-2025 14.57.06.log" />
+    <Content Include="Archivos\Logs\28-01-2025 14.58.33.log" />
+    <Content Include="Archivos\Logs\28-01-2025 15.12.20.log" />
+    <Content Include="Archivos\Logs\28-01-2025 15.21.15.log" />
+    <Content Include="Archivos\Logs\28-01-2025 15.31.42.log" />
+    <Content Include="Archivos\Logs\28-01-2025 15.47.11.log" />
+    <Content Include="Archivos\Logs\28-01-2025 17.00.36.log" />
+    <Content Include="Archivos\Logs\29-01-2025 09.37.37.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.00.31.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.01.06.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.02.55.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.04.13.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.06.59.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.08.19.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.45.21.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.49.56.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.50.15.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.50.54.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.52.21.log" />
+    <Content Include="Archivos\Logs\29-01-2025 11.53.53.log" />
+    <Content Include="Archivos\Logs\29-01-2025 12.29.42.log" />
+    <Content Include="Archivos\Logs\29-01-2025 12.35.29.log" />
+    <Content Include="Archivos\Logs\29-01-2025 12.52.52.log" />
+    <Content Include="Archivos\Logs\29-01-2025 13.07.11.log" />
+    <Content Include="Archivos\Logs\29-01-2025 13.09.03.log" />
+    <Content Include="Archivos\Logs\29-01-2025 13.12.09.log" />
+    <Content Include="Archivos\Logs\29-01-2025 13.12.56.log" />
+    <Content Include="Archivos\Logs\29-01-2025 13.13.41.log" />
+    <Content Include="Archivos\Logs\29-01-2025 16.25.23.log" />
+    <Content Include="Archivos\Logs\30-01-2025 12.04.13.log" />
+    <Content Include="Archivos\Logs\30-01-2025 12.06.25.log" />
+    <Content Include="Archivos\Logs\30-01-2025 12.13.46.log" />
+    <Content Include="Archivos\Logs\30-01-2025 12.13.57.log" />
+    <Content Include="Archivos\Logs\30-01-2025 12.21.14.log" />
+    <Content Include="Archivos\Logs\30-01-2025 12.22.07.log" />
+    <Content Include="Archivos\Logs\30-01-2025 12.35.28.log" />
+    <Content Include="Archivos\Logs\30-01-2025 14.58.13.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.01.26.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.01.38.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.02.35.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.05.22.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.05.51.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.06.58.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.07.53.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.10.37.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.10.58.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.13.39.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.14.03.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.14.48.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.15.42.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.17.06.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.17.54.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.18.07.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.18.28.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.21.53.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.22.16.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.24.16.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.25.21.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.26.27.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.29.17.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.29.29.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.33.11.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.35.19.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.36.28.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.37.00.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.37.31.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.38.34.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.39.10.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.41.16.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.41.46.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.45.11.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.46.04.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.46.09.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.46.52.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.47.56.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.48.29.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.49.57.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.50.44.log" />
+    <Content Include="Archivos\Logs\30-01-2025 15.51.29.log" />
+    <Content Include="Archivos\Logs\30-01-2025 16.03.00.log" />
+    <Content Include="Archivos\Logs\30-01-2025 16.07.35.log" />
+    <Content Include="Archivos\Logs\30-01-2025 16.07.49.log" />
+    <Content Include="Archivos\Logs\30-01-2025 16.07.58.log" />
+    <Content Include="Archivos\Logs\30-01-2025 16.22.31.log" />
+    <Content Include="Archivos\Logs\30-01-2025 16.23.12.log" />
+    <Content Include="Archivos\Logs\31-01-2025 09.06.12.log" />
+    <Content Include="Archivos\Logs\31-01-2025 09.31.43.log" />
+    <Content Include="Archivos\Logs\31-01-2025 15.35.14.log" />
+    <Content Include="Archivos\Logs\31-01-2025 15.48.50.log" />
+    <Content Include="Archivos\Logs\31-01-2025 15.49.08.log" />
+    <Content Include="Archivos\Logs\31-01-2025 15.49.17.log" />
+    <Content Include="Archivos\Registros.log" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="aspnet_client\system_web\2_0_50727\" />
+    <Folder Include="aspnet_client\system_web\4_0_30319\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>62445</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44378/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\Solucion\Cotizador\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Solucion\Cotizador\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
