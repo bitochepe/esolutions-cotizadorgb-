@@ -1,0 +1,736 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\rep\jcotizador\coizador\publicados\servicio we</_PublishTargetUrl>
+    <History>True|2025-02-20T15:57:49.3686739Z;False|2025-02-20T09:56:45.9312383-06:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="Archivos/Igss_Isr.xml">
+      <publishTime>01/10/2025 15:02:25</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.12.15.log">
+      <publishTime>02/03/2025 11:12:15</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.20.24.log">
+      <publishTime>02/03/2025 11:20:24</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.22.01.log">
+      <publishTime>02/03/2025 11:22:02</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.22.11.log">
+      <publishTime>02/03/2025 11:22:12</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.22.19.log">
+      <publishTime>02/03/2025 11:22:20</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.22.24.log">
+      <publishTime>02/03/2025 11:22:24</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.22.34.log">
+      <publishTime>02/03/2025 11:22:35</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.22.42.log">
+      <publishTime>02/03/2025 11:22:42</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.30.12.log">
+      <publishTime>02/03/2025 11:30:12</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.35.23.log">
+      <publishTime>02/03/2025 11:35:24</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.35.31.log">
+      <publishTime>02/03/2025 11:35:31</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.44.24.log">
+      <publishTime>02/03/2025 11:44:24</publishTime>
+    </File>
+    <File Include="Archivos/Logs/03-02-2025 11.45.01.log">
+      <publishTime>02/03/2025 11:45:02</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 09.25.44.log">
+      <publishTime>02/04/2025 09:25:45</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 09.25.52.log">
+      <publishTime>02/04/2025 09:25:53</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 09.26.03.log">
+      <publishTime>02/04/2025 09:26:04</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 09.26.10.log">
+      <publishTime>02/04/2025 09:26:10</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.06.49.log">
+      <publishTime>02/04/2025 10:06:49</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.06.57.log">
+      <publishTime>02/04/2025 10:06:57</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.07.03.log">
+      <publishTime>02/04/2025 10:07:03</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.07.11.log">
+      <publishTime>02/04/2025 10:07:11</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.18.38.log">
+      <publishTime>02/04/2025 10:18:38</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.30.35.log">
+      <publishTime>02/04/2025 10:30:35</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.31.10.log">
+      <publishTime>02/04/2025 10:31:10</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.32.44.log">
+      <publishTime>02/04/2025 10:32:44</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.33.28.log">
+      <publishTime>02/04/2025 10:33:29</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 10.50.17.log">
+      <publishTime>02/04/2025 10:50:17</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 12.11.18.log">
+      <publishTime>02/04/2025 12:11:19</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 12.26.33.log">
+      <publishTime>02/04/2025 12:26:33</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.17.log">
+      <publishTime>02/04/2025 15:44:17</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.21.log">
+      <publishTime>02/04/2025 15:44:21</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.23.log">
+      <publishTime>02/04/2025 15:44:23</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.25.log">
+      <publishTime>02/04/2025 15:44:25</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.28.log">
+      <publishTime>02/04/2025 15:44:28</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.32.log">
+      <publishTime>02/04/2025 15:44:33</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.35.log">
+      <publishTime>02/04/2025 15:44:35</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.38.log">
+      <publishTime>02/04/2025 15:44:38</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.40.log">
+      <publishTime>02/04/2025 15:44:41</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.44.44.log">
+      <publishTime>02/04/2025 15:44:45</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.45.01.log">
+      <publishTime>02/04/2025 15:45:02</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.45.06.log">
+      <publishTime>02/04/2025 15:45:06</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.45.14.log">
+      <publishTime>02/04/2025 15:45:14</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.45.18.log">
+      <publishTime>02/04/2025 15:45:18</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.45.25.log">
+      <publishTime>02/04/2025 15:45:25</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.45.28.log">
+      <publishTime>02/04/2025 15:45:28</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 15.45.38.log">
+      <publishTime>02/04/2025 15:45:39</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 16.14.27.log">
+      <publishTime>02/04/2025 16:14:27</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 16.14.37.log">
+      <publishTime>02/04/2025 16:14:38</publishTime>
+    </File>
+    <File Include="Archivos/Logs/04-02-2025 16.14.58.log">
+      <publishTime>02/04/2025 16:14:58</publishTime>
+    </File>
+    <File Include="Archivos/Logs/14-02-2025 12.52.47.log">
+      <publishTime>02/14/2025 12:52:49</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 12.09.52.log">
+      <publishTime>01/23/2025 12:13:03</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 12.26.44.log">
+      <publishTime>01/23/2025 12:26:45</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 15.08.39.log">
+      <publishTime>01/23/2025 15:08:40</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 15.11.14.log">
+      <publishTime>01/23/2025 15:11:16</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 15.27.13.log">
+      <publishTime>01/23/2025 15:27:15</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 15.28.31.log">
+      <publishTime>01/23/2025 15:28:31</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 15.32.46.log">
+      <publishTime>01/23/2025 15:32:47</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 15.35.04.log">
+      <publishTime>01/23/2025 15:35:06</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 15.43.34.log">
+      <publishTime>01/23/2025 15:43:36</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 16.04.26.log">
+      <publishTime>01/23/2025 16:04:35</publishTime>
+    </File>
+    <File Include="Archivos/Logs/23-01-2025 16.51.57.log">
+      <publishTime>01/23/2025 16:51:58</publishTime>
+    </File>
+    <File Include="Archivos/Logs/24-01-2025 08.55.34.log">
+      <publishTime>01/24/2025 08:55:35</publishTime>
+    </File>
+    <File Include="Archivos/Logs/24-01-2025 11.07.56.log">
+      <publishTime>01/24/2025 11:19:20</publishTime>
+    </File>
+    <File Include="Archivos/Logs/24-01-2025 11.43.25.log">
+      <publishTime>01/24/2025 11:43:26</publishTime>
+    </File>
+    <File Include="Archivos/Logs/27-01-2025 09.01.57.log">
+      <publishTime>01/27/2025 09:01:57</publishTime>
+    </File>
+    <File Include="Archivos/Logs/27-01-2025 16.02.02.log">
+      <publishTime>01/27/2025 16:02:02</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 12.55.03.log">
+      <publishTime>01/28/2025 12:55:04</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 12.55.37.log">
+      <publishTime>01/28/2025 12:55:37</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 12.55.51.log">
+      <publishTime>01/28/2025 12:55:51</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 13.06.01.log">
+      <publishTime>01/28/2025 13:06:01</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 13.08.42.log">
+      <publishTime>01/28/2025 13:08:42</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 13.09.05.log">
+      <publishTime>01/28/2025 13:09:20</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 13.35.36.log">
+      <publishTime>01/28/2025 13:35:36</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 13.37.21.log">
+      <publishTime>01/28/2025 13:37:21</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 13.39.44.log">
+      <publishTime>01/28/2025 13:39:44</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 13.41.58.log">
+      <publishTime>01/28/2025 13:41:58</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 14.38.09.log">
+      <publishTime>01/28/2025 14:38:09</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 14.57.06.log">
+      <publishTime>01/28/2025 14:57:06</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 14.58.33.log">
+      <publishTime>01/28/2025 14:58:33</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 15.12.20.log">
+      <publishTime>01/28/2025 15:12:20</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 15.21.15.log">
+      <publishTime>01/28/2025 15:21:15</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 15.31.42.log">
+      <publishTime>01/28/2025 15:31:43</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 15.47.11.log">
+      <publishTime>01/28/2025 15:47:12</publishTime>
+    </File>
+    <File Include="Archivos/Logs/28-01-2025 17.00.36.log">
+      <publishTime>01/28/2025 17:00:36</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 09.37.37.log">
+      <publishTime>01/29/2025 09:37:37</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.00.31.log">
+      <publishTime>01/29/2025 11:00:31</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.01.06.log">
+      <publishTime>01/29/2025 11:01:06</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.02.55.log">
+      <publishTime>01/29/2025 11:02:55</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.04.13.log">
+      <publishTime>01/29/2025 11:04:13</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.06.59.log">
+      <publishTime>01/29/2025 11:06:59</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.08.19.log">
+      <publishTime>01/29/2025 11:08:19</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.45.21.log">
+      <publishTime>01/29/2025 11:45:21</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.49.56.log">
+      <publishTime>01/29/2025 11:49:56</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.50.15.log">
+      <publishTime>01/29/2025 11:50:15</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.50.54.log">
+      <publishTime>01/29/2025 11:50:54</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.52.21.log">
+      <publishTime>01/29/2025 11:52:21</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 11.53.53.log">
+      <publishTime>01/29/2025 11:53:53</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 12.29.42.log">
+      <publishTime>01/29/2025 12:29:42</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 12.35.29.log">
+      <publishTime>01/29/2025 12:35:29</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 12.52.52.log">
+      <publishTime>01/29/2025 12:52:52</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 13.07.11.log">
+      <publishTime>01/29/2025 13:07:11</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 13.09.03.log">
+      <publishTime>01/29/2025 13:09:03</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 13.12.09.log">
+      <publishTime>01/29/2025 13:12:09</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 13.12.56.log">
+      <publishTime>01/29/2025 13:12:56</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 13.13.41.log">
+      <publishTime>01/29/2025 13:13:41</publishTime>
+    </File>
+    <File Include="Archivos/Logs/29-01-2025 16.25.23.log">
+      <publishTime>01/29/2025 16:25:23</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 12.04.13.log">
+      <publishTime>01/30/2025 12:04:13</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 12.06.25.log">
+      <publishTime>01/30/2025 12:06:26</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 12.13.46.log">
+      <publishTime>01/30/2025 12:13:46</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 12.13.57.log">
+      <publishTime>01/30/2025 12:13:57</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 12.21.14.log">
+      <publishTime>01/30/2025 12:21:25</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 12.22.07.log">
+      <publishTime>01/30/2025 12:22:13</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 12.35.28.log">
+      <publishTime>01/30/2025 12:35:35</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 14.58.13.log">
+      <publishTime>01/30/2025 14:58:13</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.01.26.log">
+      <publishTime>01/30/2025 15:01:26</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.01.38.log">
+      <publishTime>01/30/2025 15:01:41</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.02.35.log">
+      <publishTime>01/30/2025 15:02:35</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.05.22.log">
+      <publishTime>01/30/2025 15:05:22</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.05.51.log">
+      <publishTime>01/30/2025 15:05:51</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.06.58.log">
+      <publishTime>01/30/2025 15:06:59</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.07.53.log">
+      <publishTime>01/30/2025 15:07:53</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.10.37.log">
+      <publishTime>01/30/2025 15:10:37</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.10.58.log">
+      <publishTime>01/30/2025 15:10:58</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.13.39.log">
+      <publishTime>01/30/2025 15:13:40</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.14.03.log">
+      <publishTime>01/30/2025 15:14:03</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.14.48.log">
+      <publishTime>01/30/2025 15:14:48</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.15.42.log">
+      <publishTime>01/30/2025 15:15:43</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.17.06.log">
+      <publishTime>01/30/2025 15:17:06</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.17.54.log">
+      <publishTime>01/30/2025 15:17:54</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.18.07.log">
+      <publishTime>01/30/2025 15:18:07</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.18.28.log">
+      <publishTime>01/30/2025 15:18:28</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.21.53.log">
+      <publishTime>01/30/2025 15:22:11</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.22.16.log">
+      <publishTime>01/30/2025 15:23:23</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.24.16.log">
+      <publishTime>01/30/2025 15:24:17</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.25.21.log">
+      <publishTime>01/30/2025 15:26:22</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.26.27.log">
+      <publishTime>01/30/2025 15:28:17</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.29.17.log">
+      <publishTime>01/30/2025 15:29:17</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.29.29.log">
+      <publishTime>01/30/2025 15:29:29</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.33.11.log">
+      <publishTime>01/30/2025 15:33:11</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.35.19.log">
+      <publishTime>01/30/2025 15:35:19</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.36.28.log">
+      <publishTime>01/30/2025 15:36:28</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.37.00.log">
+      <publishTime>01/30/2025 15:37:00</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.37.31.log">
+      <publishTime>01/30/2025 15:37:31</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.38.34.log">
+      <publishTime>01/30/2025 15:38:34</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.39.10.log">
+      <publishTime>01/30/2025 15:39:10</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.41.16.log">
+      <publishTime>01/30/2025 15:41:16</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.41.46.log">
+      <publishTime>01/30/2025 15:41:46</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.45.11.log">
+      <publishTime>01/30/2025 15:45:11</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.46.04.log">
+      <publishTime>01/30/2025 15:46:04</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.46.09.log">
+      <publishTime>01/30/2025 15:46:09</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.46.52.log">
+      <publishTime>01/30/2025 15:46:52</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.47.56.log">
+      <publishTime>01/30/2025 15:47:56</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.48.29.log">
+      <publishTime>01/30/2025 15:48:29</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.49.57.log">
+      <publishTime>01/30/2025 15:49:57</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.50.44.log">
+      <publishTime>01/30/2025 15:50:44</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 15.51.29.log">
+      <publishTime>01/30/2025 15:51:29</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 16.03.00.log">
+      <publishTime>01/30/2025 16:03:00</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 16.07.35.log">
+      <publishTime>01/30/2025 16:07:35</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 16.07.49.log">
+      <publishTime>01/30/2025 16:07:49</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 16.07.58.log">
+      <publishTime>01/30/2025 16:07:59</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 16.22.31.log">
+      <publishTime>01/30/2025 16:22:32</publishTime>
+    </File>
+    <File Include="Archivos/Logs/30-01-2025 16.23.12.log">
+      <publishTime>01/30/2025 16:23:12</publishTime>
+    </File>
+    <File Include="Archivos/Logs/31-01-2025 09.06.12.log">
+      <publishTime>01/31/2025 09:06:13</publishTime>
+    </File>
+    <File Include="Archivos/Logs/31-01-2025 09.31.43.log">
+      <publishTime>01/31/2025 09:31:43</publishTime>
+    </File>
+    <File Include="Archivos/Logs/31-01-2025 15.35.14.log">
+      <publishTime>01/31/2025 15:35:14</publishTime>
+    </File>
+    <File Include="Archivos/Logs/31-01-2025 15.48.50.log">
+      <publishTime>01/31/2025 15:48:50</publishTime>
+    </File>
+    <File Include="Archivos/Logs/31-01-2025 15.49.08.log">
+      <publishTime>01/31/2025 15:49:08</publishTime>
+    </File>
+    <File Include="Archivos/Logs/31-01-2025 15.49.17.log">
+      <publishTime>01/31/2025 15:49:17</publishTime>
+    </File>
+    <File Include="Archivos/PlazoMeses_TipoGarantia.xml">
+      <publishTime>01/02/2025 15:32:08</publishTime>
+    </File>
+    <File Include="Archivos/PlazoTasaPromedio_TipoDeuda.xml">
+      <publishTime>01/07/2025 20:06:00</publishTime>
+    </File>
+    <File Include="Archivos/PolizaSeguro.xml">
+      <publishTime>01/10/2025 13:01:34</publishTime>
+    </File>
+    <File Include="Archivos/Registros.log">
+      <publishTime>01/23/2025 10:07:27</publishTime>
+    </File>
+    <File Include="Archivos/TasaInteres_DestinoCredito.xml">
+      <publishTime>01/17/2025 14:54:31</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Bcl.AsyncInterfaces.dll">
+      <publishTime>12/10/2024 15:05:40</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
+      <publishTime>09/05/2018 10:10:50</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>03/08/2023 01:09:56</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe.config">
+      <publishTime>08/08/2018 06:18:12</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.rsp">
+      <publishTime>08/08/2018 06:09:42</publishTime>
+    </File>
+    <File Include="bin/roslyn/csi.exe">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/csi.exe.config">
+      <publishTime>08/08/2018 06:18:34</publishTime>
+    </File>
+    <File Include="bin/roslyn/csi.rsp">
+      <publishTime>08/08/2018 06:09:56</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.dll">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.Scripting.dll">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.dll">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.Scripting.dll">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CSharp.Core.targets">
+      <publishTime>08/08/2018 06:09:42</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.DiaSymReader.Native.amd64.dll">
+      <publishTime>12/05/2017 03:36:44</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.DiaSymReader.Native.x86.dll">
+      <publishTime>12/05/2017 03:36:44</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Managed.Core.targets">
+      <publishTime>08/08/2018 06:09:42</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.VisualBasic.Core.targets">
+      <publishTime>08/08/2018 06:09:42</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Win32.Primitives.dll">
+      <publishTime>11/05/2016 12:55:32</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.AppContext.dll">
+      <publishTime>11/05/2016 12:55:34</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Collections.Immutable.dll">
+      <publishTime>05/15/2018 21:29:34</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Console.dll">
+      <publishTime>11/05/2016 12:55:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Diagnostics.DiagnosticSource.dll">
+      <publishTime>11/05/2016 12:55:52</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Diagnostics.FileVersionInfo.dll">
+      <publishTime>11/05/2016 12:55:56</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Diagnostics.StackTrace.dll">
+      <publishTime>11/05/2016 12:55:52</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Globalization.Calendars.dll">
+      <publishTime>11/05/2016 12:56:02</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.IO.Compression.dll">
+      <publishTime>11/05/2016 12:56:08</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.IO.Compression.ZipFile.dll">
+      <publishTime>11/05/2016 12:56:04</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.IO.FileSystem.dll">
+      <publishTime>11/05/2016 12:56:08</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.IO.FileSystem.Primitives.dll">
+      <publishTime>11/05/2016 12:56:08</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Net.Http.dll">
+      <publishTime>11/05/2016 12:56:30</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Net.Sockets.dll">
+      <publishTime>11/05/2016 12:56:34</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Reflection.Metadata.dll">
+      <publishTime>05/15/2018 21:29:44</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Runtime.InteropServices.RuntimeInformation.dll">
+      <publishTime>11/05/2016 12:57:00</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Security.Cryptography.Algorithms.dll">
+      <publishTime>11/05/2016 12:57:14</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Security.Cryptography.Encoding.dll">
+      <publishTime>11/05/2016 12:57:08</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Security.Cryptography.Primitives.dll">
+      <publishTime>11/05/2016 12:57:18</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Security.Cryptography.X509Certificates.dll">
+      <publishTime>11/05/2016 12:57:18</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Text.Encoding.CodePages.dll">
+      <publishTime>11/05/2016 12:57:20</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Threading.Tasks.Extensions.dll">
+      <publishTime>11/05/2016 12:57:24</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.ValueTuple.dll">
+      <publishTime>11/05/2016 12:57:30</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Xml.ReaderWriter.dll">
+      <publishTime>11/05/2016 12:57:36</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Xml.XmlDocument.dll">
+      <publishTime>11/05/2016 12:57:34</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Xml.XPath.dll">
+      <publishTime>11/05/2016 12:57:40</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Xml.XPath.XDocument.dll">
+      <publishTime>11/05/2016 12:57:34</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe.config">
+      <publishTime>08/08/2018 06:18:18</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.rsp">
+      <publishTime>08/08/2018 06:09:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe">
+      <publishTime>08/07/2018 23:38:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe.config">
+      <publishTime>08/08/2018 06:18:16</publishTime>
+    </File>
+    <File Include="bin/System.Buffers.dll">
+      <publishTime>02/19/2020 04:05:18</publishTime>
+    </File>
+    <File Include="bin/System.IO.Pipelines.dll">
+      <publishTime>12/10/2024 15:06:04</publishTime>
+    </File>
+    <File Include="bin/System.Memory.dll">
+      <publishTime>05/07/2022 21:31:02</publishTime>
+    </File>
+    <File Include="bin/System.Numerics.Vectors.dll">
+      <publishTime>05/15/2018 07:29:44</publishTime>
+    </File>
+    <File Include="bin/System.Runtime.CompilerServices.Unsafe.dll">
+      <publishTime>10/22/2021 17:40:18</publishTime>
+    </File>
+    <File Include="bin/System.Text.Encodings.Web.dll">
+      <publishTime>12/10/2024 15:06:04</publishTime>
+    </File>
+    <File Include="bin/System.Text.Json.dll">
+      <publishTime>12/10/2024 15:06:54</publishTime>
+    </File>
+    <File Include="bin/System.Threading.Tasks.Extensions.dll">
+      <publishTime>02/19/2020 04:05:18</publishTime>
+    </File>
+    <File Include="bin/System.ValueTuple.dll">
+      <publishTime>05/15/2018 07:29:52</publishTime>
+    </File>
+    <File Include="bin/Web Cliente.dll">
+      <publishTime>02/20/2025 09:57:45</publishTime>
+    </File>
+    <File Include="bin/Web Cliente.pdb">
+      <publishTime>02/20/2025 09:57:45</publishTime>
+    </File>
+    <File Include="bin/Web Cliente.xml">
+      <publishTime>02/20/2025 09:57:45</publishTime>
+    </File>
+    <File Include="Cotizador/PrecalificacionCreditos.asmx">
+      <publishTime>12/18/2024 13:42:18</publishTime>
+    </File>
+    <File Include="PrecompiledApp.config">
+      <publishTime>02/20/2025 09:57:46</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>02/20/2025 09:56:43</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

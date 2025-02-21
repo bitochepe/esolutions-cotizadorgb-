@@ -1,0 +1,86 @@
+ENTRADA
+23-01-2025 12:26:45 - GUID: 5a23373a-6808-4b17-81ff-f6be345a2169 - PARAMETROS: {
+  "Monto solicitado": 400000,
+  "Destino del Cr\u00E9dito": "Compra de Vivienda",
+  "Tipo de Garant\u00EDa": "Usada",
+  "Actividad Econ\u00F3mica 1": "Relaci\u00F3n de dependencia",
+  "Ingresos seg\u00FAn Constancia": "3500",
+  "Actividad Econ\u00F3mica 2": "",
+  "Ingresos seg\u00FAn Constancia 2": "",
+  "Auxilio Postumo": "",
+  "Montepio": "",
+  "Seguros": "300",
+  "Otros Descuentos de Cosntancia": "",
+  "Tipo Deuda1": "",
+  "Capital Original1": "",
+  "Cuota Deuda1": "",
+  "Tipo Deuda2": "",
+  "Capital Original2": "",
+  "Cuota Deuda2": "",
+  "Tipo Deuda3": "",
+  "Capital Original3": "",
+  "Cuota Deuda3": "",
+  "Tipo Deuda4": "",
+  "Capital Original4": "",
+  "Cuota Deuda4": "",
+  "Tipo Deuda5": "",
+  "Capital Original5": "",
+  "Cuota Deuda5": "",
+  "Tipo Deuda6": "",
+  "Capital Original6": "",
+  "Cuota Deuda6": "",
+  "Mes 1": "",
+  "Mes 2": "",
+  "Mes 3": "",
+  "Terreno": "",
+  "Construcciones": "",
+  "Score predictivo": "",
+  "Clasificaci\u00F3n SIB": "",
+  "Conteo de CCR": ""
+}
+SALIDA
+23-01-2025 12:26:45 - GUID: 5a23373a-6808-4b17-81ff-f6be345a2169 - PARAMETROS: [
+  [
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [],
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [
+      []
+    ],
+    [],
+    [],
+    [],
+    []
+  ]
+]
