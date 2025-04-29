@@ -319,6 +319,7 @@ Public Class PrecalificacionCreditos
                 dcmLIPFHA2 = pagoTotal + dcmEndeudamientoDirecto
                 intRCI1 = (dcmLIPFHA1 / dcmTotalSalarios) * 100
                 intRCI2 = (dcmLIPFHA2 / dcmTotalSalarios) * 100
+                strDetalle = ""
 
                 If intRCI1 > 50 Then
                     strDetalle += "ALTO RCI INICIAL"
@@ -350,6 +351,7 @@ Public Class PrecalificacionCreditos
                 dcmLIPDIRECTO2 = pagoTotal + dcmEndeudamientoDirecto
                 intRCI1 = (dcmLIPDIRECTO1 / dcmTotalSalarios) * 100
                 intRCI2 = (dcmLIPDIRECTO2 / dcmTotalSalarios) * 100
+                strDetalle = ""
 
                 If intRCI1 > 50 Then
                     strDetalle += "ALTO RCI INICIAL"
@@ -366,6 +368,7 @@ Public Class PrecalificacionCreditos
                 dcmTotalCuotasDirectas = Math.Round(dcmCuota + dcmEndeudamientoDirecto + PolizadeSeguro(dcmMontoSolicitado, strConstrucciones, dcmTasaInteres, strTipoGarantia), 2)
 
                 intRCI1 = (dcmTotalCuotasDirectas / dcmTotalSalarios) * 100
+                strDetalle = ""
 
                 If intRCI1 > 50 Then
                     strDetalle += "Alto RCI, Precalificación no viable"
