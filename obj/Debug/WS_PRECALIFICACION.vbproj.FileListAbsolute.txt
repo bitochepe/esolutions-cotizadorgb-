@@ -83,3 +83,6 @@ C:\rep\jcotizador\coizador\servicio web\obj\Debug\WS_PRECALIFICACION.vbproj.Copy
 C:\rep\jcotizador\coizador\servicio web\obj\Debug\Web Cliente.dll
 C:\rep\jcotizador\coizador\servicio web\obj\Debug\Web Cliente.xml
 C:\rep\jcotizador\coizador\servicio web\obj\Debug\Web Cliente.pdb
+C:\rep\jcotizador\coizador\servicio web\cotizadorgb-\obj\Debug\Web Cliente.dll
+C:\rep\jcotizador\coizador\servicio web\cotizadorgb-\obj\Debug\Web Cliente.xml
+C:\rep\jcotizador\coizador\servicio web\cotizadorgb-\obj\Debug\Web Cliente.pdb
