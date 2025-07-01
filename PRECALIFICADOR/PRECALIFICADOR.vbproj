@@ -131,7 +131,6 @@
     </Compile>
     <Compile Include="preCalificador.asmx.vb">
       <DependentUpon>preCalificador.asmx</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

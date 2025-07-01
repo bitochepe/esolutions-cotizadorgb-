@@ -9,6 +9,12 @@ Imports System.Collections.Generic
 Imports System.Text.Json
 Imports Newtonsoft.Json
 
+' Clase para retornar ambos valores de seguro
+Public Class ResultadoPolizaSeguro
+    Public Property SeguroVida As Decimal
+    Public Property SeguroDanios As Decimal
+End Class
+
 <System.Web.Script.Services.ScriptService()>
 <System.Web.Services.WebService(Namespace:="http://Cotizador.com/")>
 <System.Web.Services.WebServiceBinding(ConformsTo:=WsiProfiles.BasicProfile1_1)>
@@ -30,7 +36,8 @@ Public Class PrecalificacionCreditos
                                  strScorePredictivo As String, strClasificacionSIB As String, strConteoCCR As String, strPlazoMeses As String,
                                  strBonificacionActividadEconomica As String, strIgssActividadEconomica As String, strIsrActividadEconomica As String,
                                  strBonificacionActividadEconomica2 As String, strIgssActividadEconomica2 As String, strIsrActividadEconomica2 As String,
-                                 strComisionesActividadEconomica As String, strComisionesActividadEconomica2 As String) As XmlDocument
+                                 strComisionesActividadEconomica As String, strComisionesActividadEconomica2 As String, strTasaInteres As String,
+                                 strTipoCuota As String) As XmlDocument
 
         Dim xmlRespuesta As New XmlDocument
         Dim xDoc As XDocument
@@ -50,8 +57,13 @@ Public Class PrecalificacionCreditos
         Dim dcmTotalSalario2 As Decimal
         Dim dcmTotalSalarios As Decimal
         Dim dcmCuota As Decimal
-        Dim dcmEndeudamientoDirecto As Decimal
         Dim dcmTotalCuotasDirectas As Decimal
+        Dim dcmVidaTotal As Decimal
+        Dim dcmVidaMes As Decimal
+        Dim dcmDanios As Decimal
+        Dim dcmEndeudamientoDirecto As Decimal
+        Dim dcmEndeudamientoInterno As Decimal
+        Dim dcmEndeudamientoExterno As Decimal
         Dim intRCI1 As Integer
         Dim intRCI2 As Integer
         Dim dcmValorGarantia As Decimal
@@ -67,6 +79,7 @@ Public Class PrecalificacionCreditos
         Dim strRutaArchivo As String
         Dim strFechaHora As String
         Dim strDetalle As String
+        Dim strPlazoAdvertencia As String = ""
         Dim dcmBonificacionAE As Decimal
         Dim dcmIgssAE As Decimal
         Dim dcmIsrAE As Decimal
@@ -108,16 +121,19 @@ Public Class PrecalificacionCreditos
             EscribirRegistro("ENTRADA", strGuiaRegistro, strParametrosDetalle, strRutaArchivo)
 
             If Not String.IsNullOrEmpty(strDestinoCredito) Then
-                dcmTasaInteres = ObtenerTasaXDestinoCredito(strDestinoCredito)
+                If Not String.IsNullOrEmpty(strTasaInteres) Then
+                    dcmTasaInteres = Convert.ToDecimal(strTasaInteres)
+                Else
+                    dcmTasaInteres = ObtenerTasaXDestinoCredito(strDestinoCredito)
+                End If
             End If
             If Not String.IsNullOrEmpty(strTipoGarantia) Then
                 intPlazoMeses = ObtenerPlazoMesesXTipoGarantia(strTipoGarantia, strPlazoMeses)
-
-                'If strTipoGarantia = "Usada" Then
-                '    dcmRDG = 75
-                'ElseIf strTipoGarantia = "Nueva" Then
-                '    dcmRDG = 80
-                'End If
+                ' Guardamos el plazo máximo para poder mostrarlo en el mensaje
+                Dim intPlazoMaximo As Integer = ObtenerPlazoMesesXTipoGarantia(strTipoGarantia, "")
+                If intPlazoMeses > intPlazoMaximo Then
+                    strPlazoAdvertencia = "El plazo ingresado excede al plazo maximo para este tipo de prestamo: " & intPlazoMaximo
+                End If
             End If
 
             ' Bonificacion de actividades economicas e iggs si vienen en el formulario
@@ -287,14 +303,69 @@ Public Class PrecalificacionCreditos
                 End If
             End If
 
-            dcmEndeudamientoDirecto += SumaEndeudamientoDirecto(strTipoDeuda1, strSaldoDeuda1, strLimiteTarjeta1, strCuotaDeuda1)
-            dcmEndeudamientoDirecto += SumaEndeudamientoDirecto(strTipoDeuda2, strSaldoDeuda2, strLimiteTarjeta2, strCuotaDeuda2)
-            dcmEndeudamientoDirecto += SumaEndeudamientoDirecto(strTipoDeuda3, strSaldoDeuda3, strLimiteTarjeta3, strCuotaDeuda3)
-            dcmEndeudamientoDirecto += SumaEndeudamientoDirecto(strTipoDeuda4, strSaldoDeuda4, strLimiteTarjeta4, strCuotaDeuda4)
-            dcmEndeudamientoDirecto += SumaEndeudamientoDirecto(strTipoDeuda5, strSaldoDeuda5, strLimiteTarjeta5, strCuotaDeuda5)
-            dcmEndeudamientoDirecto += SumaEndeudamientoDirecto(strTipoDeuda6, strSaldoDeuda6, strLimiteTarjeta6, strCuotaDeuda6)
+            dcmEndeudamientoDirecto = 0
+            dcmEndeudamientoInterno = 0
+            dcmEndeudamientoExterno = 0
+            Dim endeudamiento1 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda1, strSaldoDeuda1, strLimiteTarjeta1, strCuotaDeuda1)
+            If strTipoDeuda1 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda1 = "Tarjeta de Credito Interna" Then
+                dcmEndeudamientoInterno += endeudamiento1
+            Else
+                dcmEndeudamientoExterno += endeudamiento1
+            End If
+            dcmEndeudamientoDirecto += endeudamiento1
+
+            Dim endeudamiento2 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda2, strSaldoDeuda2, strLimiteTarjeta2, strCuotaDeuda2)
+            If strTipoDeuda2 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda2 = "Tarjeta de Credito Interna" Then
+                dcmEndeudamientoInterno += endeudamiento2
+            Else
+                dcmEndeudamientoExterno += endeudamiento2
+            End If
+            dcmEndeudamientoDirecto += endeudamiento2
+
+            Dim endeudamiento3 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda3, strSaldoDeuda3, strLimiteTarjeta3, strCuotaDeuda3)
+            If strTipoDeuda3 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda3 = "Tarjeta de Credito Interna" Then
+                dcmEndeudamientoInterno += endeudamiento3
+            Else
+                dcmEndeudamientoExterno += endeudamiento3
+            End If
+            dcmEndeudamientoDirecto += endeudamiento3
+
+            Dim endeudamiento4 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda4, strSaldoDeuda4, strLimiteTarjeta4, strCuotaDeuda4)
+            If strTipoDeuda4 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda4 = "Tarjeta de Credito Interna" Then
+                dcmEndeudamientoInterno += endeudamiento4
+            Else
+                dcmEndeudamientoExterno += endeudamiento4
+            End If
+            dcmEndeudamientoDirecto += endeudamiento4
+
+            Dim endeudamiento5 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda5, strSaldoDeuda5, strLimiteTarjeta5, strCuotaDeuda5)
+            If strTipoDeuda5 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda5 = "Tarjeta de Credito Interna" Then
+                dcmEndeudamientoInterno += endeudamiento5
+            Else
+                dcmEndeudamientoExterno += endeudamiento5
+            End If
+            dcmEndeudamientoDirecto += endeudamiento5
+
+            Dim endeudamiento6 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda6, strSaldoDeuda6, strLimiteTarjeta6, strCuotaDeuda6)
+            If strTipoDeuda6 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda6 = "Tarjeta de Credito Interna" Then
+                dcmEndeudamientoInterno += endeudamiento6
+            Else
+                dcmEndeudamientoExterno += endeudamiento6
+            End If
+            dcmEndeudamientoDirecto += endeudamiento6
 
             dcmTotalSalarios = dcmTotalSalario1 + dcmTotalSalario2
+
+            ' Inicializar la variable seguros antes del bloque If/Else para LIP FHA y LIP DIRECTO
+            Dim seguros As New ResultadoPolizaSeguro()
+
+            ' Cálculo de cuota sin seguros según tipo de cuota
+            Dim cuotaSinSeguro As Decimal
+            If strTipoCuota = "saldos" Then
+                cuotaSinSeguro = (dcmMontoSolicitado / intPlazoMeses) + (dcmMontoSolicitado * (dcmTasaInteres / 100) / 360 * 30)
+            Else
+                cuotaSinSeguro = Math.Round(CalcularPago(dcmTasaInteres / 100 / 12, intPlazoMeses, dcmMontoSolicitado), 2)
+            End If
 
             If String.Equals(strTipoGarantia, "LIP FHA", StringComparison.OrdinalIgnoreCase) Then
                 Dim tasaConjunta = dcmTasaInteres
@@ -305,7 +376,7 @@ Public Class PrecalificacionCreditos
                 Dim dcmValorMatricular As Decimal
                 Dim dcmValorConstruccion As Decimal
 
-                Dim cuotaSinSeguro = CalcularPago((tasaConjunta / 100) / 12, intPlazoMeses, dcmMontoSolicitado)
+                cuotaSinSeguro = CalcularPago((tasaConjunta / 100) / 12, intPlazoMeses, dcmMontoSolicitado)
                 Dim interesCliente = Math.Round(dcmMontoSolicitado * tasa1al48 / 12, 2) 'Columna E11
                 Dim interesSubsidio = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente 'Columna F11
                 Dim S_H = Math.Round(dcmMontoSolicitado * seguroHipoteca / 100 / 12, 2) 'Columna G11
@@ -338,7 +409,7 @@ Public Class PrecalificacionCreditos
                 'Dim dcmConVida As Decimal
                 Dim dcmValorConstruccion As Decimal
 
-                Dim cuotaSinSeguro = CalcularPago((tasaBanco / 100) / 12, intPlazoMeses, dcmMontoSolicitado)
+                cuotaSinSeguro = CalcularPago((tasaBanco / 100) / 12, intPlazoMeses, dcmMontoSolicitado)
                 Dim interesCliente = Math.Round(dcmMontoSolicitado * tasa1al48 / 12, 2)
                 Dim interesSubsidio = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente
                 Dim seguro = 0.32 / 100 * dcmValorConstruccion / 12
@@ -364,8 +435,9 @@ Public Class PrecalificacionCreditos
                 strRCIDiferente = Math.Round(intRCI1, MidpointRounding.AwayFromZero) & "% | " & Math.Round(intRCI2, MidpointRounding.AwayFromZero) & "%"
 
             Else
-                dcmCuota = Math.Round(CalcularPago(dcmTasaInteres / 100 / 12, intPlazoMeses, dcmMontoSolicitado), 2)
-                dcmTotalCuotasDirectas = Math.Round(dcmCuota + dcmEndeudamientoDirecto + PolizadeSeguro(dcmMontoSolicitado, strConstrucciones, dcmTasaInteres, strTipoGarantia), 2)
+                seguros = PolizadeSeguro(dcmMontoSolicitado, strConstrucciones, dcmTasaInteres, strTipoGarantia)
+                dcmCuota = cuotaSinSeguro
+                dcmTotalCuotasDirectas = Math.Round(dcmCuota + dcmEndeudamientoDirecto + seguros.SeguroVida + seguros.SeguroDanios, 2)
 
                 intRCI1 = (dcmTotalCuotasDirectas / dcmTotalSalarios) * 100
                 strDetalle = ""
@@ -386,8 +458,8 @@ Public Class PrecalificacionCreditos
                 End If
             End If
 
-            Dim dcmIngresosVerificados As Decimal
-
+            ' Validación de ingresos verificados
+            Dim dcmIngresosVerificados As Decimal = 0
             If Not String.IsNullOrEmpty(strMes1) Then
                 dcmIngresosVerificados += Convert.ToDecimal(strMes1)
             End If
@@ -405,8 +477,8 @@ Public Class PrecalificacionCreditos
                 strDetalle += " | Los ingresos no se comprueban en estados de cuenta"
             End If
 
+            ' Validación de garantía
             If Not String.IsNullOrEmpty(strConstrucciones) Then
-                'dcmValorGarantia = dcmTerreno + dcmConstrucciones
                 dcmValorGarantia = Convert.ToDecimal(strConstrucciones)
             End If
 
@@ -414,18 +486,17 @@ Public Class PrecalificacionCreditos
                 dcmRDG = Math.Round(dcmMontoSolicitado / dcmValorGarantia * 100, MidpointRounding.AwayFromZero)
             End If
 
+            ' Cálculo del valor de garantía hipotecaria según tipo
             If String.Equals(strTipoGarantia, "Terreno", StringComparison.OrdinalIgnoreCase) Then
                 dcmValorEGarantiaHipotecaria = Math.Round(dcmMontoSolicitado * 100 / 60, 2)
+            ElseIf String.Equals(strTipoGarantia, "Usada", StringComparison.OrdinalIgnoreCase) Then
+                dcmValorEGarantiaHipotecaria = Math.Round(dcmMontoSolicitado * 100 / 75, 2)
             Else
-                If String.Equals(strTipoGarantia, "Usada", StringComparison.OrdinalIgnoreCase) Then
-                    dcmValorEGarantiaHipotecaria = Math.Round(dcmMontoSolicitado * 100 / 75, 2)
-                Else
-                    dcmValorEGarantiaHipotecaria = Math.Round(dcmMontoSolicitado * 100 / 80, 2)
-                End If
+                dcmValorEGarantiaHipotecaria = Math.Round(dcmMontoSolicitado * 100 / 80, 2)
             End If
 
+            ' Validación de hipoteca
             Dim dcmHipoteca As Decimal = 0
-
             If Not String.IsNullOrEmpty(strTerreno) Then
                 dcmValorGarantia += Convert.ToDecimal(strTerreno)
             End If
@@ -441,25 +512,36 @@ Public Class PrecalificacionCreditos
 
             Context.Response.ContentType = "application/xml"
             xmlRespuesta.LoadXml($"<?xml version=""1.0""?><Root>
-                                  <tasaInteres>{dcmTasaInteres}%</tasaInteres>
-                                  <plazoMeses>{intPlazoMeses}</plazoMeses>
-                                  <noCuota>{dcmCuota}</noCuota>
-                                  <rci>{intRCI1}%</rci>
-                                  <bonificacionActividadEconomica>{dcmBonificacionActividadEconomica}</bonificacionActividadEconomica>
-                                  <igssActividadEconomica>{Math.Round(dcmIgssActividadEconomica, 2)}</igssActividadEconomica>
-                                  <isrActividadEconomica>{Math.Round(dcmIsrActividadEconomica, 2)}</isrActividadEconomica>
-                                  <bonificacionActividadEconomica2>{dcmBonificacionActividadEconomica2}</bonificacionActividadEconomica2>
-                                  <igssActividadEconomica2>{Math.Round(dcmIgssActividadEconomica2, 2)}</igssActividadEconomica2>
-                                  <isrActividadEconomica2>{Math.Round(dcmIsrActividadEconomica2, 2)}</isrActividadEconomica2>
-                                  <cuota>{dcmCuota}</cuota>
-                                  <totalCuentasDirectas>{dcmTotalCuotasDirectas}</totalCuentasDirectas>
-                                  <valorGarantiaHipotecaria>{dcmValorEGarantiaHipotecaria}</valorGarantiaHipotecaria>
-                                  <rdg>{dcmRDG}%</rdg>
-                                  <valorDiferente>{strValorDiferente}</valorDiferente>
-                                  <rciDiferente>{strRCIDiferente}</rciDiferente>
-                                  <trfLip></trfLip>
-                                  <detalle>{strDetalle}</detalle>
-                              </Root>")
+                                   <tasaInteres>{dcmTasaInteres}%</tasaInteres>
+                                   <plazoMeses>{intPlazoMeses}</plazoMeses>
+                                   <noCuota>{dcmCuota}</noCuota>
+                                   <rci>{intRCI1}%</rci>
+                                   <bonificacionActividadEconomica>{dcmBonificacionActividadEconomica}</bonificacionActividadEconomica>
+                                   <igssActividadEconomica>{Math.Round(dcmIgssActividadEconomica, 2)}</igssActividadEconomica>
+                                   <isrActividadEconomica>{Math.Round(dcmIsrActividadEconomica, 2)}</isrActividadEconomica>
+                                   <bonificacionActividadEconomica2>{dcmBonificacionActividadEconomica2}</bonificacionActividadEconomica2>
+                                   <igssActividadEconomica2>{Math.Round(dcmIgssActividadEconomica2, 2)}</igssActividadEconomica2>
+                                   <isrActividadEconomica2>{Math.Round(dcmIsrActividadEconomica2, 2)}</isrActividadEconomica2>
+                                   <cuota>{dcmCuota}</cuota>
+                                   <totalCuentasDirectas>{dcmTotalCuotasDirectas}</totalCuentasDirectas>
+                                   <valorGarantiaHipotecaria>{dcmValorEGarantiaHipotecaria}</valorGarantiaHipotecaria>
+                                   <rdg>{dcmRDG}%</rdg>
+                                   <valorDiferente>{strValorDiferente}</valorDiferente>
+                                   <rciDiferente>{strRCIDiferente}</rciDiferente>
+                                   <trfLip></trfLip>
+                                   <detalle>{strDetalle}</detalle>
+                                   <plazoAdvertencia>{strPlazoAdvertencia}</plazoAdvertencia>
+                                   <endeudamientoInterno>{Math.Round(dcmEndeudamientoInterno, 2)}</endeudamientoInterno>
+                                   <endeudamientoExterno>{Math.Round(dcmEndeudamientoExterno, 2)}</endeudamientoExterno>
+                                   <endeudamiento1>{If(String.IsNullOrEmpty(strTipoDeuda1), "", Math.Round(endeudamiento1, 2).ToString())}</endeudamiento1>
+                                   <endeudamiento2>{If(String.IsNullOrEmpty(strTipoDeuda2), "", Math.Round(endeudamiento2, 2).ToString())}</endeudamiento2>
+                                   <endeudamiento3>{If(String.IsNullOrEmpty(strTipoDeuda3), "", Math.Round(endeudamiento3, 2).ToString())}</endeudamiento3>
+                                   <endeudamiento4>{If(String.IsNullOrEmpty(strTipoDeuda4), "", Math.Round(endeudamiento4, 2).ToString())}</endeudamiento4>
+                                   <endeudamiento5>{If(String.IsNullOrEmpty(strTipoDeuda5), "", Math.Round(endeudamiento5, 2).ToString())}</endeudamiento5>
+                                   <endeudamiento6>{If(String.IsNullOrEmpty(strTipoDeuda6), "", Math.Round(endeudamiento6, 2).ToString())}</endeudamiento6>
+                                   <seguroVida>{Math.Round(seguros.SeguroVida, 2)}</seguroVida>
+                                   <seguroDanios>{Math.Round(seguros.SeguroDanios, 2)}</seguroDanios>
+                               </Root>")
 
 
             xDoc = XDocument.Parse(xmlRespuesta.OuterXml)
@@ -513,13 +595,7 @@ Public Class PrecalificacionCreditos
         End If
 
         Dim dcmPlazoMeses As Decimal = Convert.ToDecimal(strPlazoMeses)
-
-        If dcmXmlPlazo < dcmPlazoMeses Then
-
-            Return dcmXmlPlazo
-        Else
-            Return dcmPlazoMeses
-        End If
+        Return dcmPlazoMeses
 
     End Function
 
@@ -542,12 +618,12 @@ Public Class PrecalificacionCreditos
         Dim pago As Decimal
 
         If dcmTasaMensual = 0 Then
-            Return dcmValorPresente / dcmTotalPeriodos
+            Return Math.Round(dcmValorPresente / dcmTotalPeriodos, 2)
         End If
 
         pago = (dcmTasaMensual * dcmValorPresente) / (1 - Math.Pow(1 + dcmTasaMensual, -dcmTotalPeriodos))
 
-        Return pago
+        Return Math.Round(pago, 2)
     End Function
 
     Function SumaEndeudamientoDirecto(strTipoDeuda As String, strSaldoDeuda As String, strLimiteTarjeta As String, strCuotaDeuda As String)
@@ -580,7 +656,7 @@ Public Class PrecalificacionCreditos
 
         Select Case strTipoDeuda
             Case "Tarjeta de Credito Interna"
-                dcmCuota = (dcmSaldoDeuda * 0.33 / intPlazo) + (dcmSaldoDeuda * 0.33) * (dcmTasaPromedio / 12)
+                dcmCuota = (dcmLimiteTarjeta * 0.33 / intPlazo) + (dcmLimiteTarjeta * 0.33) * (dcmTasaPromedio / 12)
             Case "Tarjeta de Credito Mayor a 9 m"
                 dcmCuota = CalcularPago(dcmTasaPromedio / 12, intPlazo, dcmSaldoDeuda)
             Case "Tarjeta de Credito Menor a 9m"
@@ -616,7 +692,7 @@ Public Class PrecalificacionCreditos
         Return dcmCuota
     End Function
 
-    Function PolizadeSeguro(dcmMontoSolicitado As Decimal, strConstrucciones As String, dcmTasaInteres As Decimal, strTipoGarantia As String)
+    Function PolizadeSeguro(dcmMontoSolicitado As Decimal, strConstrucciones As String, dcmTasaInteres As Decimal, strTipoGarantia As String) As ResultadoPolizaSeguro
         Dim strRutaArchivo As String = Server.MapPath("~/Archivos/PolizaSeguro.xml")
         Dim documento As XDocument = XDocument.Load(strRutaArchivo)
         Dim dcmDanios As Decimal
@@ -668,7 +744,10 @@ Public Class PrecalificacionCreditos
 
         dcmGastos = dcmIntereses + dcmPrimaTotal + dcmVidaTotal
 
-        Return dcmVidaMes + dcmPrimaMes
+        Dim resultado As New ResultadoPolizaSeguro()
+        resultado.SeguroVida = dcmVidaMes
+        resultado.SeguroDanios = dcmPrimaMes
+        Return resultado
     End Function
 
     Sub ObtenerPlazoTasaPromedioXTipo(strTipoDeuda As String, ByRef intPlazo As Integer, ByRef dcmTasaPromedio As Decimal)
@@ -707,6 +786,33 @@ Public Class PrecalificacionCreditos
 
     End Sub
 
+    <WebMethod()>
+    Public Function SumarNumeros(dcmNumero1 As Decimal, dcmNumero2 As Decimal) As XmlDocument
+        Dim xmlRespuesta As New XmlDocument
 
+        Try
+            ' Calculamos la suma de los dos números
+            Dim dcmResultado As Decimal = dcmNumero1 + dcmNumero2
+
+            ' Creamos la respuesta XML con el resultado
+            Context.Response.ContentType = "application/xml"
+            xmlRespuesta.LoadXml($"<?xml version=""1.0""?><Root>
+                                   <numero1>{dcmNumero1}</numero1>
+                                   <numero2>{dcmNumero2}</numero2>
+                                   <resultado>{dcmResultado}</resultado>
+                                   <mensaje>Suma realizada exitosamente</mensaje>
+                               </Root>")
+
+            Return xmlRespuesta
+
+        Catch ex As Exception
+            xmlRespuesta.LoadXml($"<respuesta>
+                                  <error>{ex.Message}</error>
+                                  <complete>{ex}</complete>
+                              </respuesta>")
+
+            Return xmlRespuesta
+        End Try
+    End Function
 
 End Class
