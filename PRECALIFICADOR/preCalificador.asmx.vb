@@ -15,6 +15,105 @@ Public Class ResultadoPolizaSeguro
     Public Property SeguroDanios As Decimal
 End Class
 
+' Clase auxiliar para validaciones de datos
+Public Class ValidadorDatos
+    ''' <summary>
+    ''' Valida si una cadena puede convertirse a Decimal de forma segura
+    ''' </summary>
+    ''' <param name="valor">Valor a validar</param>
+    ''' <param name="nombreCampo">Nombre del campo para mensajes de error</param>
+    ''' <param name="esOpcional">Indica si el campo es opcional (puede estar vacío)</param>
+    ''' <returns>El valor convertido o 0 si es opcional y está vacío</returns>
+    Public Shared Function ValidarDecimal(valor As String, nombreCampo As String, Optional esOpcional As Boolean = True) As Decimal
+        ' Si es opcional y está vacío, retornar 0
+        If esOpcional AndAlso String.IsNullOrWhiteSpace(valor) Then
+            Return 0
+        End If
+        
+        ' Si no es opcional y está vacío, lanzar excepción
+        If Not esOpcional AndAlso String.IsNullOrWhiteSpace(valor) Then
+            Throw New ArgumentException($"El campo '{nombreCampo}' es obligatorio y no puede estar vacío.")
+        End If
+        
+        ' Intentar convertir a decimal
+        Dim resultado As Decimal
+        If Decimal.TryParse(valor, resultado) Then
+            ' Validar que no sea negativo
+            If resultado < 0 Then
+                Throw New ArgumentException($"El campo '{nombreCampo}' no puede ser negativo. Valor recibido: {valor}")
+            End If
+            Return resultado
+        Else
+            Throw New ArgumentException($"El campo '{nombreCampo}' debe ser un número válido. Valor recibido: '{valor}'")
+        End If
+    End Function
+    
+    ''' <summary>
+    ''' Valida si una cadena puede convertirse a Integer de forma segura
+    ''' </summary>
+    ''' <param name="valor">Valor a validar</param>
+    ''' <param name="nombreCampo">Nombre del campo para mensajes de error</param>
+    ''' <param name="esOpcional">Indica si el campo es opcional (puede estar vacío)</param>
+    ''' <returns>El valor convertido o 0 si es opcional y está vacío</returns>
+    Public Shared Function ValidarInteger(valor As String, nombreCampo As String, Optional esOpcional As Boolean = True) As Integer
+        ' Si es opcional y está vacío, retornar 0
+        If esOpcional AndAlso String.IsNullOrWhiteSpace(valor) Then
+            Return 0
+        End If
+        
+        ' Si no es opcional y está vacío, lanzar excepción
+        If Not esOpcional AndAlso String.IsNullOrWhiteSpace(valor) Then
+            Throw New ArgumentException($"El campo '{nombreCampo}' es obligatorio y no puede estar vacío.")
+        End If
+        
+        ' Intentar convertir a integer
+        Dim resultado As Integer
+        If Integer.TryParse(valor, resultado) Then
+            ' Validar que no sea negativo
+            If resultado < 0 Then
+                Throw New ArgumentException($"El campo '{nombreCampo}' no puede ser negativo. Valor recibido: {valor}")
+            End If
+            Return resultado
+        Else
+            Throw New ArgumentException($"El campo '{nombreCampo}' debe ser un número entero válido. Valor recibido: '{valor}'")
+        End If
+    End Function
+    
+    ''' <summary>
+    ''' Valida campos obligatorios de texto
+    ''' </summary>
+    ''' <param name="valor">Valor a validar</param>
+    ''' <param name="nombreCampo">Nombre del campo para mensajes de error</param>
+    ''' <param name="esOpcional">Indica si el campo es opcional</param>
+    ''' <returns>El valor validado</returns>
+    Public Shared Function ValidarTexto(valor As String, nombreCampo As String, Optional esOpcional As Boolean = True) As String
+        ' Si es opcional, permitir valores vacíos
+        If esOpcional Then
+            Return If(valor, "")
+        End If
+        
+        ' Si no es opcional y está vacío, lanzar excepción
+        If String.IsNullOrWhiteSpace(valor) Then
+            Throw New ArgumentException($"El campo '{nombreCampo}' es obligatorio y no puede estar vacío.")
+        End If
+        
+        Return valor.Trim()
+    End Function
+    
+    ''' <summary>
+    ''' Valida que un valor decimal esté dentro de un rango específico
+    ''' </summary>
+    ''' <param name="valor">Valor a validar</param>
+    ''' <param name="nombreCampo">Nombre del campo</param>
+    ''' <param name="valorMinimo">Valor mínimo permitido</param>
+    ''' <param name="valorMaximo">Valor máximo permitido</param>
+    Public Shared Sub ValidarRango(valor As Decimal, nombreCampo As String, valorMinimo As Decimal, valorMaximo As Decimal)
+        If valor < valorMinimo OrElse valor > valorMaximo Then
+            Throw New ArgumentException($"El campo '{nombreCampo}' debe estar entre {valorMinimo} y {valorMaximo}. Valor recibido: {valor}")
+        End If
+    End Sub
+End Class
+
 <System.Web.Script.Services.ScriptService()>
 <System.Web.Services.WebService(Namespace:="http://Cotizador.com/")>
 <System.Web.Services.WebServiceBinding(ConformsTo:=WsiProfiles.BasicProfile1_1)>
@@ -37,7 +136,7 @@ Public Class PrecalificacionCreditos
                                  strBonificacionActividadEconomica As String, strIgssActividadEconomica As String, strIsrActividadEconomica As String,
                                  strBonificacionActividadEconomica2 As String, strIgssActividadEconomica2 As String, strIsrActividadEconomica2 As String,
                                  strComisionesActividadEconomica As String, strComisionesActividadEconomica2 As String, strTasaInteres As String,
-                                 strTipoCuota As String) As XmlDocument
+                                 strTipoCuota As String, strTasaReferenciaLIP As String) As XmlDocument
 
         Dim xmlRespuesta As New XmlDocument
         Dim xDoc As XDocument
@@ -66,6 +165,24 @@ Public Class PrecalificacionCreditos
         Dim dcmEndeudamientoExterno As Decimal
         Dim intRCI1 As Integer
         Dim intRCI2 As Integer
+        Dim intRCI1al48 As Integer = 0
+        Dim intRCI49al84 As Integer = 0
+        Dim intRCI85mas As Integer = 0
+        Dim intRCI1al48Total As Integer = 0
+        Dim intRCI49al84Total As Integer = 0
+        Dim intRCI85masTotal As Integer = 0
+        Dim dcmLIPFHA1al48 As Decimal = 0
+        Dim dcmLIPFHA1al48Total As Decimal = 0
+        Dim dcmLIPFHA49al84 As Decimal = 0
+        Dim dcmLIPFHA49al84Total As Decimal = 0
+        Dim dcmLIPFHA85mas As Decimal = 0
+        Dim dcmLIPFHA85masTotal As Decimal = 0
+        Dim dcmLIPDIRECTO1al48 As Decimal = 0
+        Dim dcmLIPDIRECTO1al48Total As Decimal = 0
+        Dim dcmLIPDIRECTO49al84 As Decimal = 0
+        Dim dcmLIPDIRECTO49al84Total As Decimal = 0
+        Dim dcmLIPDIRECTO85mas As Decimal = 0
+        Dim dcmLIPDIRECTO85masTotal As Decimal = 0
         Dim dcmValorGarantia As Decimal
         Dim dcmLIPFHA1 As Decimal
         Dim dcmLIPFHA2 As Decimal
@@ -90,25 +207,158 @@ Public Class PrecalificacionCreditos
         Dim dcmComisionesActividadEconomica2 As Decimal
 
         Try
+            ' ===========================================
+            ' VALIDACIONES DE DATOS DE ENTRADA
+            ' ===========================================
+
+            ' Validar campos obligatorios principales
+            If dcmMontoSolicitado <= 0 Then
+                Throw New ArgumentException("El monto solicitado debe ser mayor a 0.")
+            End If
+
+            strDestinoCredito = ValidadorDatos.ValidarTexto(strDestinoCredito, "Destino del Crédito", False)
+            strTipoGarantia = ValidadorDatos.ValidarTexto(strTipoGarantia, "Tipo de Garantía", False)
+            strActividadEconomica = ValidadorDatos.ValidarTexto(strActividadEconomica, "Actividad Económica 1", True)
+
+            ' Validar campos numéricos opcionales
+            Dim dcmIngresoConstanciaValidado As Decimal = dcmIngresoConstancia
+            If dcmIngresoConstanciaValidado < 0 Then
+                Throw New ArgumentException("Los ingresos según constancia no pueden ser negativos.")
+            End If
+
+            strActividadEconomica2 = ValidadorDatos.ValidarTexto(strActividadEconomica2, "Actividad Económica 2", True)
+
+            ' Validar todos los campos de deudas (6 deudas posibles)
+            Dim deudasValidadas As New List(Of Dictionary(Of String, Object))
+            For i As Integer = 1 To 6
+                Dim tipoDeuda As String = ""
+                Dim saldoDeuda As Decimal = 0
+                Dim limiteTarjeta As Decimal = 0
+                Dim cuotaDeuda As Decimal = Nothing
+
+                Select Case i
+                    Case 1
+                        tipoDeuda = ValidadorDatos.ValidarTexto(strTipoDeuda1, $"Tipo Deuda {i}", True)
+                        saldoDeuda = ValidadorDatos.ValidarDecimal(strSaldoDeuda1, $"Saldo Deuda {i}", True)
+                        limiteTarjeta = ValidadorDatos.ValidarDecimal(strLimiteTarjeta1, $"Límite Tarjeta {i}", True)
+                        cuotaDeuda = ValidadorDatos.ValidarDecimal(strCuotaDeuda1, $"Cuota Deuda {i}", True)
+                    Case 2
+                        tipoDeuda = ValidadorDatos.ValidarTexto(strTipoDeuda2, $"Tipo Deuda {i}", True)
+                        saldoDeuda = ValidadorDatos.ValidarDecimal(strSaldoDeuda2, $"Saldo Deuda {i}", True)
+                        limiteTarjeta = ValidadorDatos.ValidarDecimal(strLimiteTarjeta2, $"Límite Tarjeta {i}", True)
+                        cuotaDeuda = ValidadorDatos.ValidarDecimal(strCuotaDeuda2, $"Cuota Deuda {i}", True)
+                    Case 3
+                        tipoDeuda = ValidadorDatos.ValidarTexto(strTipoDeuda3, $"Tipo Deuda {i}", True)
+                        saldoDeuda = ValidadorDatos.ValidarDecimal(strSaldoDeuda3, $"Saldo Deuda {i}", True)
+                        limiteTarjeta = ValidadorDatos.ValidarDecimal(strLimiteTarjeta3, $"Límite Tarjeta {i}", True)
+                        cuotaDeuda = ValidadorDatos.ValidarDecimal(strCuotaDeuda3, $"Cuota Deuda {i}", True)
+                    Case 4
+                        tipoDeuda = ValidadorDatos.ValidarTexto(strTipoDeuda4, $"Tipo Deuda {i}", True)
+                        saldoDeuda = ValidadorDatos.ValidarDecimal(strSaldoDeuda4, $"Saldo Deuda {i}", True)
+                        limiteTarjeta = ValidadorDatos.ValidarDecimal(strLimiteTarjeta4, $"Límite Tarjeta {i}", True)
+                        cuotaDeuda = ValidadorDatos.ValidarDecimal(strCuotaDeuda4, $"Cuota Deuda {i}", True)
+                    Case 5
+                        tipoDeuda = ValidadorDatos.ValidarTexto(strTipoDeuda5, $"Tipo Deuda {i}", True)
+                        saldoDeuda = ValidadorDatos.ValidarDecimal(strSaldoDeuda5, $"Saldo Deuda {i}", True)
+                        limiteTarjeta = ValidadorDatos.ValidarDecimal(strLimiteTarjeta5, $"Límite Tarjeta {i}", True)
+                        cuotaDeuda = ValidadorDatos.ValidarDecimal(strCuotaDeuda5, $"Cuota Deuda {i}", True)
+                    Case 6
+                        tipoDeuda = ValidadorDatos.ValidarTexto(strTipoDeuda6, $"Tipo Deuda {i}", True)
+                        saldoDeuda = ValidadorDatos.ValidarDecimal(strSaldoDeuda6, $"Saldo Deuda {i}", True)
+                        limiteTarjeta = ValidadorDatos.ValidarDecimal(strLimiteTarjeta6, $"Límite Tarjeta {i}", True)
+                        cuotaDeuda = ValidadorDatos.ValidarDecimal(strCuotaDeuda6, $"Cuota Deuda {i}", True)
+                End Select
+
+                ' Si hay tipo de deuda, validar que tenga datos relacionados
+                If Not String.IsNullOrEmpty(tipoDeuda) Then
+                    If saldoDeuda = 0 AndAlso cuotaDeuda = 0 Then
+                        Throw New ArgumentException($"Para la deuda {i} de tipo '{tipoDeuda}', debe proporcionar al menos el saldo de la deuda o la cuota mensual.")
+                    End If
+                End If
+
+                deudasValidadas.Add(New Dictionary(Of String, Object) From {
+                    {"Tipo", tipoDeuda},
+                    {"Saldo", saldoDeuda},
+                    {"Limite", limiteTarjeta},
+                    {"Cuota", cuotaDeuda}
+                })
+            Next
+
+            ' Validar campos de ingresos verificados
+            Dim mes1 As Decimal = ValidadorDatos.ValidarDecimal(strMes1, "Mes 1", True)
+            Dim mes2 As Decimal = ValidadorDatos.ValidarDecimal(strMes2, "Mes 2", True)
+            Dim mes3 As Decimal = ValidadorDatos.ValidarDecimal(strMes3, "Mes 3", True)
+
+            ' Validar campos de garantía
+            Dim terreno As Decimal = ValidadorDatos.ValidarDecimal(strTerreno, "Terreno", True)
+            Dim construcciones As Decimal = ValidadorDatos.ValidarDecimal(strConstrucciones, "Construcciones", True)
+
+            ' Validar campos de scoring
+            strScorePredictivo = ValidadorDatos.ValidarTexto(strScorePredictivo, "Score Predictivo", True)
+            strClasificacionSIB = ValidadorDatos.ValidarTexto(strClasificacionSIB, "Clasificación SIB", True)
+            Dim conteoCCR As Integer = ValidadorDatos.ValidarInteger(strConteoCCR, "Conteo CCR", True)
+
+            ' Validar plazo de meses
+            Dim plazoMesesValidado As Integer = ValidadorDatos.ValidarInteger(strPlazoMeses, "Plazo de Meses", True)
+
+            ' Validar campos de bonificaciones y descuentos
+            Dim bonificacionAE As Decimal = ValidadorDatos.ValidarDecimal(strBonificacionActividadEconomica, "Bonificación Actividad Económica", True)
+            Dim igssAE As Decimal = ValidadorDatos.ValidarDecimal(strIgssActividadEconomica, "IGSS Actividad Económica", True)
+            Dim isrAE As Decimal = ValidadorDatos.ValidarDecimal(strIsrActividadEconomica, "ISR Actividad Económica", True)
+
+            Dim bonificacionAE2 As Decimal = ValidadorDatos.ValidarDecimal(strBonificacionActividadEconomica2, "Bonificación Actividad Económica 2", True)
+            Dim igssAE2 As Decimal = ValidadorDatos.ValidarDecimal(strIgssActividadEconomica2, "IGSS Actividad Económica 2", True)
+            Dim isrAE2 As Decimal = ValidadorDatos.ValidarDecimal(strIsrActividadEconomica2, "ISR Actividad Económica 2", True)
+
+            Dim comisionesAE As Decimal = ValidadorDatos.ValidarDecimal(strComisionesActividadEconomica, "Comisiones Actividad Económica", True)
+            Dim comisionesAE2 As Decimal = ValidadorDatos.ValidarDecimal(strComisionesActividadEconomica2, "Comisiones Actividad Económica 2", True)
+
+            ' Validar tasa de interés
+            Dim tasaInteresValidada As Decimal = ValidadorDatos.ValidarDecimal(strTasaInteres, "Tasa de Interés", True)
+
+            ' Validar tipo de cuota
+            strTipoCuota = ValidadorDatos.ValidarTexto(strTipoCuota, "Tipo de Cuota", True)
+            If Not String.IsNullOrEmpty(strTipoCuota) AndAlso strTipoCuota.ToLower() <> "saldos" AndAlso strTipoCuota.ToLower() <> "nivelada" Then
+                Throw New ArgumentException("El tipo de cuota debe ser 'saldos' o 'nivelada'.")
+            End If
+
+            ' Validar tasa de referencia LIP (solo para LIP FHA y LIP DIRECTO)
+            Dim tasaReferenciaLIP As Decimal = ValidadorDatos.ValidarDecimal(strTasaReferenciaLIP, "Tasa de Referencia LIP", True)
+
+            ' Validar otros descuentos
+            Dim auxilioPostumo As Decimal = ValidadorDatos.ValidarDecimal(strAuxilioPostumo, "Auxilio Póstumo", True)
+            Dim montepio As Decimal = ValidadorDatos.ValidarDecimal(strMontepio, "Montepio", True)
+            Dim segurosDescuento As Decimal = ValidadorDatos.ValidarDecimal(strSeguros, "Seguros", True)
+            Dim descuentoConstancia As Decimal = ValidadorDatos.ValidarDecimal(strDescuentoConstancia, "Descuento Constancia", True)
+
+            ' Validar ingresos constancia 2
+            Dim ingresoConstancia2Validado As Decimal = ValidadorDatos.ValidarDecimal(strIngresoConstancia2, "Ingresos Constancia 2", True)
+            If ingresoConstancia2Validado < 0 Then
+                Throw New ArgumentException("Los ingresos según constancia 2 no pueden ser negativos.")
+            End If
+
+            ' ===========================================
+            ' FIN DE VALIDACIONES - CONTINUAR CON LÓGICA ORIGINAL
+            ' ===========================================
 
             strParametros = New Dictionary(Of String, Object) From {
                 {"Monto solicitado", dcmMontoSolicitado},
                 {"Destino del Crédito", strDestinoCredito}, {"Tipo de Garantía", strTipoGarantia}, {"Actividad Económica 1", strActividadEconomica},
-                {"Ingresos según Constancia", dcmIngresoConstancia}, {"Actividad Económica 2", strActividadEconomica2}, {"Ingresos según Constancia 2", strIngresoConstancia2},
-                {"Auxilio Postumo", strAuxilioPostumo}, {"Montepio", strMontepio}, {"Seguros", strSeguros}, {"Otros Descuentos de Cosntancia", strDescuentoConstancia},
-                {"Tipo Deuda1", strTipoDeuda1}, {"Capital Original1", strSaldoDeuda1}, {"Limite Tarjeta1", strLimiteTarjeta1}, {"Cuota Deuda1", strCuotaDeuda1},
-                {"Tipo Deuda2", strTipoDeuda2}, {"Capital Original2", strSaldoDeuda2}, {"Limite Tarjeta2", strLimiteTarjeta2}, {"Cuota Deuda2", strCuotaDeuda2},
-                {"Tipo Deuda3", strTipoDeuda3}, {"Capital Original3", strSaldoDeuda3}, {"Limite Tarjeta3", strLimiteTarjeta3}, {"Cuota Deuda3", strCuotaDeuda3},
-                {"Tipo Deuda4", strTipoDeuda4}, {"Capital Original4", strSaldoDeuda4}, {"Limite Tarjeta4", strLimiteTarjeta4}, {"Cuota Deuda4", strCuotaDeuda4},
-                {"Tipo Deuda5", strTipoDeuda5}, {"Capital Original5", strSaldoDeuda5}, {"Limite Tarjeta5", strLimiteTarjeta5}, {"Cuota Deuda5", strCuotaDeuda5},
-                {"Tipo Deuda6", strTipoDeuda6}, {"Capital Original6", strSaldoDeuda6}, {"Limite Tarjeta6", strLimiteTarjeta6}, {"Cuota Deuda6", strCuotaDeuda6},
-                {"Mes 1", strMes1}, {"Mes 2", strMes2}, {"Mes 3", strMes3}, {"Terreno", strTerreno}, {"Construcciones", strConstrucciones},
-                {"Score predictivo", strScorePredictivo}, {"Clasificación SIB", strClasificacionSIB}, {"Conteo de CCR", strConteoCCR},
-                {"No de cuotas", strPlazoMeses}, {"Bonificación AE", strBonificacionActividadEconomica}, {"IGSS AE", strIgssActividadEconomica},
-                {"ISR AE", strIsrActividadEconomica}, {"Bonificación AE 2", strBonificacionActividadEconomica2}, {"IGSS AE 2", strIgssActividadEconomica2},
-                {"ISR AE 2", strIsrActividadEconomica2}, {"Comisiones AE", strComisionesActividadEconomica}, {"Comisiones AE 2", strComisionesActividadEconomica2}
+                {"Ingresos según Constancia", dcmIngresoConstanciaValidado}, {"Actividad Económica 2", strActividadEconomica2}, {"Ingresos según Constancia 2", ingresoConstancia2Validado},
+                {"Auxilio Postumo", auxilioPostumo}, {"Montepio", montepio}, {"Seguros", segurosDescuento}, {"Otros Descuentos de Constancia", descuentoConstancia},
+                {"Tipo Deuda1", deudasValidadas(0)("Tipo")}, {"Capital Original1", deudasValidadas(0)("Saldo")}, {"Limite Tarjeta1", deudasValidadas(0)("Limite")}, {"Cuota Deuda1", deudasValidadas(0)("Cuota")},
+                {"Tipo Deuda2", deudasValidadas(1)("Tipo")}, {"Capital Original2", deudasValidadas(1)("Saldo")}, {"Limite Tarjeta2", deudasValidadas(1)("Limite")}, {"Cuota Deuda2", deudasValidadas(1)("Cuota")},
+                {"Tipo Deuda3", deudasValidadas(2)("Tipo")}, {"Capital Original3", deudasValidadas(2)("Saldo")}, {"Limite Tarjeta3", deudasValidadas(2)("Limite")}, {"Cuota Deuda3", deudasValidadas(2)("Cuota")},
+                {"Tipo Deuda4", deudasValidadas(3)("Tipo")}, {"Capital Original4", deudasValidadas(3)("Saldo")}, {"Limite Tarjeta4", deudasValidadas(3)("Limite")}, {"Cuota Deuda4", deudasValidadas(3)("Cuota")},
+                {"Tipo Deuda5", deudasValidadas(4)("Tipo")}, {"Capital Original5", deudasValidadas(4)("Saldo")}, {"Limite Tarjeta5", deudasValidadas(4)("Limite")}, {"Cuota Deuda5", deudasValidadas(4)("Cuota")},
+                {"Tipo Deuda6", deudasValidadas(5)("Tipo")}, {"Capital Original6", deudasValidadas(5)("Saldo")}, {"Limite Tarjeta6", deudasValidadas(5)("Limite")}, {"Cuota Deuda6", deudasValidadas(5)("Cuota")},
+                {"Mes 1", mes1}, {"Mes 2", mes2}, {"Mes 3", mes3}, {"Terreno", terreno}, {"Construcciones", construcciones},
+                {"Score predictivo", strScorePredictivo}, {"Clasificación SIB", strClasificacionSIB}, {"Conteo de CCR", conteoCCR},
+                {"No de cuotas", plazoMesesValidado}, {"Bonificación AE", bonificacionAE}, {"IGSS AE", igssAE},
+                {"ISR AE", isrAE}, {"Bonificación AE 2", bonificacionAE2}, {"IGSS AE 2", igssAE2},
+                {"ISR AE 2", isrAE2}, {"Comisiones AE", comisionesAE}, {"Comisiones AE 2", comisionesAE2},
+                {"Tasa de Referencia LIP", tasaReferenciaLIP}
             }
-
 
             'strParametrosDetalle = String.Join(", ", strParametros.Select(Function(kvp) $"{kvp.Key} = {kvp.Value}"))
             strGuiaRegistro = Guid.NewGuid().ToString()
@@ -120,15 +370,23 @@ Public Class PrecalificacionCreditos
             '})
             EscribirRegistro("ENTRADA", strGuiaRegistro, strParametrosDetalle, strRutaArchivo)
 
+            ' Usar valores validados para tasa de interés
             If Not String.IsNullOrEmpty(strDestinoCredito) Then
-                If Not String.IsNullOrEmpty(strTasaInteres) Then
-                    dcmTasaInteres = Convert.ToDecimal(strTasaInteres)
+                If tasaInteresValidada > 0 Then
+                    dcmTasaInteres = tasaInteresValidada
                 Else
                     dcmTasaInteres = ObtenerTasaXDestinoCredito(strDestinoCredito)
                 End If
             End If
+
+            ' Usar valores validados para plazo de meses
             If Not String.IsNullOrEmpty(strTipoGarantia) Then
-                intPlazoMeses = ObtenerPlazoMesesXTipoGarantia(strTipoGarantia, strPlazoMeses)
+                If plazoMesesValidado > 0 Then
+                    intPlazoMeses = plazoMesesValidado
+                Else
+                    intPlazoMeses = ObtenerPlazoMesesXTipoGarantia(strTipoGarantia, "")
+                End If
+
                 ' Guardamos el plazo máximo para poder mostrarlo en el mensaje
                 Dim intPlazoMaximo As Integer = ObtenerPlazoMesesXTipoGarantia(strTipoGarantia, "")
                 If intPlazoMeses > intPlazoMaximo Then
@@ -136,223 +394,145 @@ Public Class PrecalificacionCreditos
                 End If
             End If
 
-            ' Bonificacion de actividades economicas e iggs si vienen en el formulario
-            If Not String.IsNullOrEmpty(strBonificacionActividadEconomica) Then
-                dcmBonificacionAE = Convert.ToDecimal(strBonificacionActividadEconomica)
-            End If
+            ' Usar valores validados para bonificaciones y descuentos
+            dcmBonificacionAE = bonificacionAE
+            dcmIgssAE = igssAE
+            dcmIsrAE = isrAE
+            dcmBonificacionAE2 = bonificacionAE2
+            dcmIgssAE2 = igssAE2
+            dcmIsrAE2 = isrAE2
 
-            If Not String.IsNullOrEmpty(strIgssActividadEconomica) Then
-                dcmIgssAE = Convert.ToDecimal(strIgssActividadEconomica)
-            End If
+            ' Calculo de los ingresos de la actividad economica usando valores validados
+            If Not String.IsNullOrEmpty(strActividadEconomica) And dcmIngresoConstanciaValidado > 0 Then
 
-            If Not String.IsNullOrEmpty(strIsrActividadEconomica) Then
-                dcmIsrAE = Convert.ToDecimal(strIsrActividadEconomica)
-            End If
-
-            If Not String.IsNullOrEmpty(strBonificacionActividadEconomica2) Then
-                dcmBonificacionAE2 = Convert.ToDecimal(strBonificacionActividadEconomica2)
-            End If
-
-            If Not String.IsNullOrEmpty(strIgssActividadEconomica2) Then
-                dcmIgssAE2 = Convert.ToDecimal(strIgssActividadEconomica2)
-            End If
-
-            If Not String.IsNullOrEmpty(strIsrActividadEconomica2) Then
-                dcmIsrAE2 = Convert.ToDecimal(strIsrActividadEconomica2)
-            End If
-
-            ' Calculo de los ingresos de la actividad economica, se calcula isr sobre el total de ingresos sin la bonificacion si no se ingresa isr
-            If Not String.IsNullOrEmpty(strActividadEconomica) And Not String.IsNullOrEmpty(dcmIngresoConstancia) Then
-
-                ' Calculo de Isr, se calcula isr sobre el total de ingresos sin la bonificacion si no se ingresa isr
-                If Not String.IsNullOrEmpty(strIsrActividadEconomica) Then
-                    dcmIsrActividadEconomica = Convert.ToDecimal(strIsrActividadEconomica)
+                ' Usar valores validados para ISR
+                If isrAE > 0 Then
+                    dcmIsrActividadEconomica = isrAE
                 Else
-                    dcmIsrActividadEconomica = (dcmIngresoConstancia * ObtenerIgss_Isr("Isr")) / 100
+                    dcmIsrActividadEconomica = (dcmIngresoConstanciaValidado * ObtenerIgss_Isr("Isr")) / 100
                 End If
 
-
-                If Not String.IsNullOrEmpty(strDescuentoConstancia) Then
-                    dcmOtrasDeducciones += Convert.ToDecimal(strDescuentoConstancia)
-                End If
-                If Not String.IsNullOrEmpty(strAuxilioPostumo) Then
-                    dcmOtrasDeducciones += Convert.ToDecimal(strAuxilioPostumo)
-                End If
-                If Not String.IsNullOrEmpty(strMontepio) Then
-                    dcmOtrasDeducciones += Convert.ToDecimal(strMontepio)
-                End If
-                If Not String.IsNullOrEmpty(strSeguros) Then
-                    dcmOtrasDeducciones += Convert.ToDecimal(strSeguros)
-                End If
+                ' Usar valores validados para otras deducciones
+                dcmOtrasDeducciones = descuentoConstancia + auxilioPostumo + montepio + segurosDescuento
 
                 If String.Equals(strActividadEconomica, "Relacion de dependencia", StringComparison.OrdinalIgnoreCase) Then
 
-                    ' Calculo de la bonificacion, se coloca 250 si no se ingresa bonificacion
-                    If Not String.IsNullOrEmpty(strBonificacionActividadEconomica) Then
-                        dcmBonificacionActividadEconomica = Convert.ToDecimal(strBonificacionActividadEconomica)
+                    ' Usar valores validados para bonificación
+                    If bonificacionAE > 0 Then
+                        dcmBonificacionActividadEconomica = bonificacionAE
                     Else
                         dcmBonificacionActividadEconomica = 250
                     End If
 
-                    ' Calculo del igss, se calcula igss sobre el total de ingresos sin la bonificacion si no se ingresa igss
-                    If Not String.IsNullOrEmpty(strIgssActividadEconomica) Then
-                        dcmIgssActividadEconomica = Convert.ToDecimal(strIgssActividadEconomica)
+                    ' Usar valores validados para IGSS
+                    If igssAE > 0 Then
+                        dcmIgssActividadEconomica = igssAE
                     Else
-                        dcmIgssActividadEconomica = (dcmIngresoConstancia * ObtenerIgss_Isr("Igss")) / 100
+                        dcmIgssActividadEconomica = (dcmIngresoConstanciaValidado * ObtenerIgss_Isr("Igss")) / 100
                     End If
 
-                    ' Calculo de comisiones, se coloca 0 si no se ingresa comision
-                    If Not String.IsNullOrEmpty(strComisionesActividadEconomica) Then
-                        dcmComisionesActividadEconomica = Convert.ToDecimal(strComisionesActividadEconomica)
+                    ' Usar valores validados para comisiones
+                    If comisionesAE > 0 Then
+                        dcmComisionesActividadEconomica = comisionesAE * 0.5
                     Else
                         dcmComisionesActividadEconomica = 0
                     End If
 
-                    dcmTotalS = dcmIngresoConstancia + dcmBonificacionActividadEconomica - dcmIgssActividadEconomica - dcmIsrActividadEconomica - dcmOtrasDeducciones + dcmComisionesActividadEconomica
+                    dcmTotalS = dcmIngresoConstanciaValidado + dcmBonificacionActividadEconomica - dcmIgssActividadEconomica - dcmIsrActividadEconomica - dcmOtrasDeducciones + dcmComisionesActividadEconomica
                     dcmTotalSalario1 = Math.Round((dcmTotalS * 14) / 12, 2)
                 Else
-                    '' Calculo de la bonificacion, se coloca 0 si no se ingresa bonificacion
-                    'If Not String.IsNullOrEmpty(strBonificacionActividadEconomica) Then
-                    '    dcmBonificacionActividadEconomica = Convert.ToDecimal(strBonificacionActividadEconomica)
-                    'Else
-                    '    dcmBonificacionActividadEconomica = 0
-                    'End If
-                    '' Calculo del igss, se calcula igss a 0 si no se ingresa igss
-                    'If Not String.IsNullOrEmpty(strIgssActividadEconomica) Then
-                    '    dcmIgssActividadEconomica = Convert.ToDecimal(strIgssActividadEconomica)
-                    'Else
-                    '    dcmIgssActividadEconomica = 0
-                    'End If
-
                     dcmBonificacionActividadEconomica = 0
                     dcmIgssActividadEconomica = 0
 
-                    ' Calculo de comisiones, se coloca 0 si no se ingresa comision
-                    If Not String.IsNullOrEmpty(strComisionesActividadEconomica) Then
-                        dcmComisionesActividadEconomica = Convert.ToDecimal(strComisionesActividadEconomica) * 0.5
+                    ' Usar valores validados para comisiones
+                    If comisionesAE > 0 Then
+                        dcmComisionesActividadEconomica = comisionesAE * 0.5
                     Else
                         dcmComisionesActividadEconomica = 0
                     End If
 
-                    dcmTotalS = dcmIngresoConstancia - dcmIsrActividadEconomica + dcmBonificacionActividadEconomica - dcmIgssActividadEconomica - dcmOtrasDeducciones + dcmComisionesActividadEconomica
+                    dcmTotalS = dcmIngresoConstanciaValidado - dcmIsrActividadEconomica + dcmBonificacionActividadEconomica - dcmIgssActividadEconomica - dcmOtrasDeducciones + dcmComisionesActividadEconomica
                     dcmTotalSalario1 = Math.Round(dcmTotalS * 0.6, 2)
                 End If
             End If
 
-            If Not String.IsNullOrEmpty(strActividadEconomica2) Then
-                If Not String.IsNullOrEmpty(strIngresoConstancia2) Then
+            ' Calculo de los ingresos de la segunda actividad economica usando valores validados
+            If Not String.IsNullOrEmpty(strActividadEconomica2) And ingresoConstancia2Validado > 0 Then
 
-                    ' Calculo de Isr, se calcula isr sobre el total de ingresos sin la bonificacion si no se ingresa isr
-                    If Not String.IsNullOrEmpty(strIsrActividadEconomica2) Then
-                        dcmIsrActividadEconomica2 = Convert.ToDecimal(strIsrActividadEconomica2)
+                ' Usar valores validados para ISR
+                If isrAE2 > 0 Then
+                    dcmIsrActividadEconomica2 = isrAE2
+                Else
+                    dcmIsrActividadEconomica2 = (ingresoConstancia2Validado * ObtenerIgss_Isr("Isr")) / 100
+                End If
+
+                If String.Equals(strActividadEconomica2, "Relacion de dependencia", StringComparison.OrdinalIgnoreCase) Then
+                    ' Usar valores validados para bonificación
+                    If bonificacionAE2 > 0 Then
+                        dcmBonificacionActividadEconomica2 = bonificacionAE2
                     Else
-                        dcmIsrActividadEconomica2 = (Convert.ToDecimal(strIngresoConstancia2) * ObtenerIgss_Isr("Isr")) / 100
+                        dcmBonificacionActividadEconomica2 = 250
                     End If
 
-                    If String.Equals(strActividadEconomica2, "Relacion de dependencia", StringComparison.OrdinalIgnoreCase) Then
-                        ' Calculo de la bonificacion, se coloca 250 si no se ingresa bonificacion
-                        If Not String.IsNullOrEmpty(strBonificacionActividadEconomica2) Then
-                            dcmBonificacionActividadEconomica2 = Convert.ToDecimal(strBonificacionActividadEconomica2)
-                        Else
-                            dcmBonificacionActividadEconomica2 = 250
-                        End If
-                        ' Calculo del igss, se calcula igss sobre el total de ingresos sin la bonificacion si no se ingresa igss
-                        If Not String.IsNullOrEmpty(strIgssActividadEconomica2) Then
-                            dcmIgssActividadEconomica2 = Convert.ToDecimal(strIgssActividadEconomica2)
-                        Else
-                            dcmIgssActividadEconomica2 = (Convert.ToDecimal(strIngresoConstancia2) * ObtenerIgss_Isr("Igss")) / 100
-                        End If
-
-                        ' Calculo de comisiones, se coloca 0 si no se ingresa comision
-                        If Not String.IsNullOrEmpty(strComisionesActividadEconomica2) Then
-                            dcmComisionesActividadEconomica2 = Convert.ToDecimal(strComisionesActividadEconomica2) * 0.5
-                        Else
-                            dcmComisionesActividadEconomica2 = 0
-                        End If
-
-                        ' Calculo del total de salarios
-                        dcmTotalS = Convert.ToDecimal(strIngresoConstancia2) + dcmBonificacionActividadEconomica2 - dcmIgssActividadEconomica2 - dcmIsrActividadEconomica2 + dcmComisionesActividadEconomica2
-                        dcmTotalSalario2 = Math.Round((dcmTotalS * 14) / 12, 2)
+                    ' Usar valores validados para IGSS
+                    If igssAE2 > 0 Then
+                        dcmIgssActividadEconomica2 = igssAE2
                     Else
-                        '' Calculo de la bonificacion, se coloca 0 si no se ingresa bonificacion
-                        'If Not String.IsNullOrEmpty(strBonificacionActividadEconomica2) Then
-                        '    dcmBonificacionActividadEconomica2 = Convert.ToDecimal(strBonificacionActividadEconomica2)
-                        'Else
-                        '    dcmBonificacionActividadEconomica2 = 0
-                        'End If
-                        '' Calculo del igss, se calcula igss a 0 si no se ingresa igss
-                        'If Not String.IsNullOrEmpty(strIgssActividadEconomica2) Then
-                        '    dcmIgssActividadEconomica2 = Convert.ToDecimal(strIgssActividadEconomica2)
-                        'Else
-                        '    dcmIgssActividadEconomica2 = 0
-                        'End If
-
-                        dcmBonificacionActividadEconomica2 = 0
-                        dcmIgssActividadEconomica2 = 0
-
-                        ' Calculo de comisiones, se coloca 0 si no se ingresa comision
-                        If Not String.IsNullOrEmpty(strComisionesActividadEconomica2) Then
-                            dcmComisionesActividadEconomica = Convert.ToDecimal(strComisionesActividadEconomica2) * 0.5
-                        Else
-                            dcmComisionesActividadEconomica = 0
-                        End If
-                        ' Calculo del total de salarios
-                        dcmTotalS = Convert.ToDecimal(strIngresoConstancia2) + dcmBonificacionActividadEconomica2 - dcmIgssActividadEconomica2 - dcmIsrActividadEconomica2 + dcmComisionesActividadEconomica2
-                        dcmTotalSalario2 = Math.Round(dcmTotalS * 0.6, 2)
+                        dcmIgssActividadEconomica2 = (ingresoConstancia2Validado * ObtenerIgss_Isr("Igss")) / 100
                     End If
+
+                    ' Usar valores validados para comisiones
+                    If comisionesAE2 > 0 Then
+                        dcmComisionesActividadEconomica2 = comisionesAE2 * 0.5
+                    Else
+                        dcmComisionesActividadEconomica2 = 0
+                    End If
+
+                    ' Calculo del total de salarios
+                    dcmTotalS = ingresoConstancia2Validado + dcmBonificacionActividadEconomica2 - dcmIgssActividadEconomica2 - dcmIsrActividadEconomica2 + dcmComisionesActividadEconomica2
+                    dcmTotalSalario2 = Math.Round((dcmTotalS * 14) / 12, 2)
+                Else
+                    dcmBonificacionActividadEconomica2 = 0
+                    dcmIgssActividadEconomica2 = 0
+
+                    ' Usar valores validados para comisiones
+                    If comisionesAE2 > 0 Then
+                        dcmComisionesActividadEconomica2 = comisionesAE2 * 0.5
+                    Else
+                        dcmComisionesActividadEconomica2 = 0
+                    End If
+
+                    ' Calculo del total de salarios
+                    dcmTotalS = ingresoConstancia2Validado + dcmBonificacionActividadEconomica2 - dcmIgssActividadEconomica2 - dcmIsrActividadEconomica2 + dcmComisionesActividadEconomica2
+                    dcmTotalSalario2 = Math.Round(dcmTotalS * 0.6, 2)
                 End If
             End If
 
+            ' Cálculo de endeudamiento usando valores validados
             dcmEndeudamientoDirecto = 0
             dcmEndeudamientoInterno = 0
             dcmEndeudamientoExterno = 0
-            Dim endeudamiento1 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda1, strSaldoDeuda1, strLimiteTarjeta1, strCuotaDeuda1)
-            If strTipoDeuda1 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda1 = "Tarjeta de Credito Interna" Then
-                dcmEndeudamientoInterno += endeudamiento1
-            Else
-                dcmEndeudamientoExterno += endeudamiento1
-            End If
-            dcmEndeudamientoDirecto += endeudamiento1
 
-            Dim endeudamiento2 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda2, strSaldoDeuda2, strLimiteTarjeta2, strCuotaDeuda2)
-            If strTipoDeuda2 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda2 = "Tarjeta de Credito Interna" Then
-                dcmEndeudamientoInterno += endeudamiento2
-            Else
-                dcmEndeudamientoExterno += endeudamiento2
-            End If
-            dcmEndeudamientoDirecto += endeudamiento2
+            ' Procesar cada deuda validada
+            For i As Integer = 0 To 5
+                Dim deuda As Dictionary(Of String, Object) = deudasValidadas(i)
+                Dim tipoDeuda As String = deuda("Tipo").ToString()
+                Dim saldoDeuda As Decimal = Convert.ToDecimal(deuda("Saldo"))
+                Dim limiteTarjeta As Decimal = Convert.ToDecimal(deuda("Limite"))
+                Dim cuotaDeuda As Decimal = Convert.ToDecimal(deuda("Cuota"))
 
-            Dim endeudamiento3 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda3, strSaldoDeuda3, strLimiteTarjeta3, strCuotaDeuda3)
-            If strTipoDeuda3 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda3 = "Tarjeta de Credito Interna" Then
-                dcmEndeudamientoInterno += endeudamiento3
-            Else
-                dcmEndeudamientoExterno += endeudamiento3
-            End If
-            dcmEndeudamientoDirecto += endeudamiento3
+                ' Solo procesar si hay tipo de deuda
+                If Not String.IsNullOrEmpty(tipoDeuda) Then
+                    Dim endeudamiento As Decimal = SumaEndeudamientoDirecto(tipoDeuda, saldoDeuda.ToString(), limiteTarjeta.ToString(), cuotaDeuda.ToString())
 
-            Dim endeudamiento4 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda4, strSaldoDeuda4, strLimiteTarjeta4, strCuotaDeuda4)
-            If strTipoDeuda4 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda4 = "Tarjeta de Credito Interna" Then
-                dcmEndeudamientoInterno += endeudamiento4
-            Else
-                dcmEndeudamientoExterno += endeudamiento4
-            End If
-            dcmEndeudamientoDirecto += endeudamiento4
-
-            Dim endeudamiento5 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda5, strSaldoDeuda5, strLimiteTarjeta5, strCuotaDeuda5)
-            If strTipoDeuda5 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda5 = "Tarjeta de Credito Interna" Then
-                dcmEndeudamientoInterno += endeudamiento5
-            Else
-                dcmEndeudamientoExterno += endeudamiento5
-            End If
-            dcmEndeudamientoDirecto += endeudamiento5
-
-            Dim endeudamiento6 As Decimal = SumaEndeudamientoDirecto(strTipoDeuda6, strSaldoDeuda6, strLimiteTarjeta6, strCuotaDeuda6)
-            If strTipoDeuda6 = "Prestamo Fiduciario Indirecto Bantrab" Or strTipoDeuda6 = "Tarjeta de Credito Interna" Then
-                dcmEndeudamientoInterno += endeudamiento6
-            Else
-                dcmEndeudamientoExterno += endeudamiento6
-            End If
-            dcmEndeudamientoDirecto += endeudamiento6
+                    If tipoDeuda = "Prestamo Fiduciario Indirecto Bantrab" Or tipoDeuda = "Tarjeta de Credito Interna" Then
+                        dcmEndeudamientoInterno += endeudamiento
+                    Else
+                        dcmEndeudamientoExterno += endeudamiento
+                    End If
+                    dcmEndeudamientoDirecto += endeudamiento
+                End If
+            Next
 
             dcmTotalSalarios = dcmTotalSalario1 + dcmTotalSalario2
 
@@ -362,81 +542,202 @@ Public Class PrecalificacionCreditos
             ' Cálculo de cuota sin seguros según tipo de cuota
             Dim cuotaSinSeguro As Decimal
             If strTipoCuota = "saldos" Then
-                cuotaSinSeguro = (dcmMontoSolicitado / intPlazoMeses) + (dcmMontoSolicitado * (dcmTasaInteres / 100) / 360 * 30)
+                cuotaSinSeguro = Math.Round((dcmMontoSolicitado / intPlazoMeses) + (dcmMontoSolicitado * (dcmTasaInteres / 100) / 360 * 30), 2)
             Else
                 cuotaSinSeguro = Math.Round(CalcularPago(dcmTasaInteres / 100 / 12, intPlazoMeses, dcmMontoSolicitado), 2)
             End If
 
-            If String.Equals(strTipoGarantia, "LIP FHA", StringComparison.OrdinalIgnoreCase) Then
-                Dim tasaConjunta = dcmTasaInteres
-                Dim seguroHipoteca = 1.26
-                Dim tasaReferencia = 5.98 'Preguntar de donde se obtiene
-                Dim tasaBanco = tasaConjunta - seguroHipoteca
-                Dim tasa1al48 = (tasaBanco / 100) - (40 / 100) * (tasaReferencia / 100)
-                Dim dcmValorMatricular As Decimal
-                Dim dcmValorConstruccion As Decimal
+            If String.Equals(strDestinoCredito, "LIP FHA", StringComparison.OrdinalIgnoreCase) Then
+                ' Solo realizar el cálculo LIP FHA si se proporciona la tasa de referencia
+                If tasaReferenciaLIP > 0 Then
+                    Dim tasaConjunta = dcmTasaInteres
+                    Dim seguroHipoteca = 1.26
+                    Dim tasaBanco = tasaConjunta - seguroHipoteca
+                    Dim dcmValorMatricular As Decimal
+                    Dim dcmValorConstruccion As Decimal
 
-                cuotaSinSeguro = CalcularPago((tasaConjunta / 100) / 12, intPlazoMeses, dcmMontoSolicitado)
-                Dim interesCliente = Math.Round(dcmMontoSolicitado * tasa1al48 / 12, 2) 'Columna E11
-                Dim interesSubsidio = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente 'Columna F11
-                Dim S_H = Math.Round(dcmMontoSolicitado * seguroHipoteca / 100 / 12, 2) 'Columna G11
-                Dim IUSI = 0.009 * dcmValorMatricular / 12
-                Dim seguro = 0.28 / 100 * dcmValorConstruccion / 12
-                Dim capital = cuotaSinSeguro - interesCliente - S_H - interesSubsidio
-                Dim pagoTotal = capital + interesCliente + interesSubsidio + S_H + IUSI + seguro
-                Dim pagoCliente = pagoTotal - interesSubsidio
+                    cuotaSinSeguro = Math.Round(CalcularPago((tasaConjunta / 100) / 12, intPlazoMeses, dcmMontoSolicitado), 2)
+                    Dim S_H = Math.Round(dcmMontoSolicitado * seguroHipoteca / 100 / 12, 2) 'Columna G11
+                    Dim IUSI = 0.009 * dcmValorMatricular / 12
+                    Dim seguroHipotecaValor = 0.28 / 100 * dcmValorConstruccion / 12
 
-                dcmLIPFHA1 = pagoCliente + dcmEndeudamientoDirecto
-                dcmLIPFHA2 = pagoTotal + dcmEndeudamientoDirecto
-                intRCI1 = (dcmLIPFHA1 / dcmTotalSalarios) * 100
-                intRCI2 = (dcmLIPFHA2 / dcmTotalSalarios) * 100
-                strDetalle = ""
+                    ' Variables para los diferentes RCI según plazo ya están declaradas arriba
 
-                If intRCI1 > 50 Then
-                    strDetalle += "ALTO RCI INICIAL"
+                    ' Cálculo para cuotas 1-48 (40% subsidio)
+                    If intPlazoMeses >= 1 Then
+                        Dim plazo1al48 = Math.Min(intPlazoMeses, 48)
+                        Dim tasa1al48 = (tasaBanco / 100) - (40 / 100) * (tasaReferenciaLIP / 100)
+                        Dim interesCliente1al48 = Math.Round(dcmMontoSolicitado * tasa1al48 / 12, 2)
+                        Dim interesSubsidio1al48 = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente1al48
+                        Dim capital1al48 = cuotaSinSeguro - interesCliente1al48 - S_H - interesSubsidio1al48
+                        Dim pagoTotal1al48 = capital1al48 + interesCliente1al48 + interesSubsidio1al48 + S_H + IUSI + seguroHipotecaValor
+                        Dim pagoCliente1al48 = pagoTotal1al48 - interesSubsidio1al48
+
+                        dcmLIPFHA1al48 = pagoCliente1al48
+                        dcmLIPFHA1al48Total = pagoTotal1al48
+                        intRCI1al48 = ((dcmLIPFHA1al48 + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                        intRCI1al48Total = ((dcmLIPFHA1al48Total + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                    End If
+
+                    ' Cálculo para cuotas 49-84 (30% subsidio)
+                    If intPlazoMeses > 48 Then
+                        Dim plazo49al84 = Math.Min(intPlazoMeses - 48, 36)
+                        Dim tasa49al84 = (tasaBanco / 100) - (30 / 100) * (tasaReferenciaLIP / 100)
+                        Dim interesCliente49al84 = Math.Round(dcmMontoSolicitado * tasa49al84 / 12, 2)
+                        Dim interesSubsidio49al84 = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente49al84
+                        Dim capital49al84 = cuotaSinSeguro - interesCliente49al84 - S_H - interesSubsidio49al84
+                        Dim pagoTotal49al84 = capital49al84 + interesCliente49al84 + interesSubsidio49al84 + S_H + IUSI + seguroHipotecaValor
+                        Dim pagoCliente49al84 = pagoTotal49al84 - interesSubsidio49al84
+
+                        dcmLIPFHA49al84 = pagoCliente49al84
+                        dcmLIPFHA49al84Total = pagoTotal49al84
+                        intRCI49al84 = ((dcmLIPFHA49al84 + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                        intRCI49al84Total = ((dcmLIPFHA49al84Total + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                    End If
+
+                    ' Cálculo para cuotas 85+ (0% subsidio)
+                    If intPlazoMeses > 84 Then
+                        Dim tasa85mas = (tasaBanco / 100) - (0 / 100) * (tasaReferenciaLIP / 100)
+                        Dim interesCliente85mas = Math.Round(dcmMontoSolicitado * tasa85mas / 12, 2)
+                        Dim interesSubsidio85mas = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente85mas
+                        Dim capital85mas = cuotaSinSeguro - interesCliente85mas - S_H - interesSubsidio85mas
+                        Dim pagoTotal85mas = capital85mas + interesCliente85mas + interesSubsidio85mas + S_H + IUSI + seguroHipotecaValor
+                        Dim pagoCliente85mas = pagoTotal85mas - interesSubsidio85mas
+
+                        dcmLIPFHA85mas = pagoCliente85mas
+                        dcmLIPFHA85masTotal = pagoTotal85mas
+                        intRCI85mas = ((dcmLIPFHA85mas + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                        intRCI85masTotal = ((dcmLIPFHA85masTotal + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                    End If
+
+                    ' Usar el primer RCI calculado para compatibilidad
+                    If intPlazoMeses <= 48 Then
+                        intRCI1 = intRCI1al48
+                        intRCI2 = intRCI1al48Total
+                    ElseIf intPlazoMeses <= 84 Then
+                        intRCI1 = intRCI49al84
+                        intRCI2 = intRCI49al84Total
+                    Else
+                        intRCI1 = intRCI85mas
+                        intRCI2 = intRCI85masTotal
+                    End If
+
+                    strDetalle = ""
+                    If intRCI1 > 50 Then
+                        strDetalle += "ALTO RCI INICIAL"
+                    End If
+                    If intRCI2 > 65 Then
+                        strDetalle += " | ALTO RCI DESPUES DEL SUBSIDIO"
+                    End If
+
+                    strValorDiferente = dcmLIPFHA1 & " | " & dcmLIPFHA2
+                    strRCIDiferente = Math.Round(intRCI1, MidpointRounding.AwayFromZero) & "% | " & Math.Round(intRCI2, MidpointRounding.AwayFromZero) & "%"
+                Else
+                    ' Si no se proporciona tasa de referencia, no hacer cálculo
+                    strDetalle = "Para LIP FHA se requiere proporcionar la Tasa de Referencia LIP"
+                    ' Inicializar valores en 0 para evitar errores
+                    dcmCuota = 0
+                    dcmTotalCuotasDirectas = 0
+                    intRCI1 = 0
+                    intRCI2 = 0
                 End If
-                If intRCI2 > 65 Then
-                    strDetalle += " | ALTO RCI DESPUES DEL SUBSIDIO"
+
+            ElseIf String.Equals(strDestinoCredito, "LIP DIRECTO", StringComparison.OrdinalIgnoreCase) Then
+                ' Solo realizar el cálculo LIP DIRECTO si se proporciona la tasa de referencia
+                If tasaReferenciaLIP > 0 Then
+                    Dim tasaBanco = dcmTasaInteres
+                    Dim dcmValorConstruccion = construcciones
+
+                    cuotaSinSeguro = Math.Round(CalcularPago((tasaBanco / 100) / 12, intPlazoMeses, dcmMontoSolicitado), 2)
+                    seguros = PolizadeSeguro(dcmMontoSolicitado, construcciones.ToString(), dcmTasaInteres, strTipoGarantia)
+
+                    Dim seguroDirectoValor = seguros.SeguroDanios
+                    Dim vida = seguros.SeguroVida
+
+                    ' Variables para los diferentes RCI según plazo ya están declaradas arriba
+
+                    ' Cálculo para cuotas 1-48 (40% subsidio)
+                    If intPlazoMeses >= 1 Then
+                        Dim plazo1al48 = Math.Min(intPlazoMeses, 48)
+                        Dim tasa1al48 = (tasaBanco / 100) - (40 / 100) * (tasaReferenciaLIP / 100)
+                        Dim interesCliente1al48 = Math.Round(dcmMontoSolicitado * tasa1al48 / 12, 2)
+                        Dim interesSubsidio1al48 = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente1al48
+                        Dim capital1al48 = cuotaSinSeguro - interesCliente1al48 - interesSubsidio1al48
+                        Dim pagoTotal1al48 = capital1al48 + interesCliente1al48 + interesSubsidio1al48 + vida + seguroDirectoValor
+                        Dim pagoCliente1al48 = pagoTotal1al48 - interesSubsidio1al48
+
+                        dcmLIPDIRECTO1al48 = pagoCliente1al48
+                        dcmLIPDIRECTO1al48Total = pagoTotal1al48
+                        intRCI1al48 = ((dcmLIPDIRECTO1al48 + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                        intRCI1al48Total = ((dcmLIPDIRECTO1al48Total + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                    End If
+
+                    ' Cálculo para cuotas 49-84 (30% subsidio)
+                    If intPlazoMeses > 48 Then
+                        Dim plazo49al84 = Math.Min(intPlazoMeses - 48, 36)
+                        Dim tasa49al84 = (tasaBanco / 100) - (30 / 100) * (tasaReferenciaLIP / 100)
+                        Dim interesCliente49al84 = Math.Round(dcmMontoSolicitado * tasa49al84 / 12, 2)
+                        Dim interesSubsidio49al84 = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente49al84
+                        Dim capital49al84 = cuotaSinSeguro - interesCliente49al84 - interesSubsidio49al84
+                        Dim pagoTotal49al84 = capital49al84 + interesCliente49al84 + interesSubsidio49al84 + vida + seguroDirectoValor
+                        Dim pagoCliente49al84 = pagoTotal49al84 - interesSubsidio49al84
+
+                        dcmLIPDIRECTO49al84 = pagoCliente49al84
+                        dcmLIPDIRECTO49al84Total = pagoTotal49al84
+                        intRCI49al84 = ((dcmLIPDIRECTO49al84 + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                        intRCI49al84Total = ((dcmLIPDIRECTO49al84Total + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                    End If
+
+                    ' Cálculo para cuotas 85+ (0% subsidio)
+                    If intPlazoMeses > 84 Then
+                        Dim tasa85mas = (tasaBanco / 100) - (0 / 100) * (tasaReferenciaLIP / 100)
+                        Dim interesCliente85mas = Math.Round(dcmMontoSolicitado * tasa85mas / 12, 2)
+                        Dim interesSubsidio85mas = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente85mas
+                        Dim capital85mas = cuotaSinSeguro - interesCliente85mas - interesSubsidio85mas
+                        Dim pagoTotal85mas = capital85mas + interesCliente85mas + interesSubsidio85mas + vida + seguroDirectoValor
+                        Dim pagoCliente85mas = pagoTotal85mas - interesSubsidio85mas
+
+                        dcmLIPDIRECTO85mas = pagoCliente85mas
+                        dcmLIPDIRECTO85masTotal = pagoTotal85mas
+                        intRCI85mas = ((dcmLIPDIRECTO85mas + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                        intRCI85masTotal = ((dcmLIPDIRECTO85masTotal + dcmEndeudamientoDirecto) / dcmTotalSalarios) * 100
+                    End If
+
+                    ' Usar el primer RCI calculado para compatibilidad
+                    If intPlazoMeses <= 48 Then
+                        intRCI1 = intRCI1al48
+                        intRCI2 = intRCI1al48Total
+                    ElseIf intPlazoMeses <= 84 Then
+                        intRCI1 = intRCI49al84
+                        intRCI2 = intRCI49al84Total
+                    Else
+                        intRCI1 = intRCI85mas
+                        intRCI2 = intRCI85masTotal
+                    End If
+
+                    strDetalle = ""
+                    If intRCI1 > 50 Then
+                        strDetalle += "ALTO RCI INICIAL"
+                    End If
+                    If intRCI2 > 65 Then
+                        strDetalle += " | ALTO RCI DESPUES DEL SUBSIDIO"
+                    End If
+
+                    strValorDiferente = dcmLIPDIRECTO1 & " | " & dcmLIPDIRECTO2
+                    strRCIDiferente = Math.Round(intRCI1, MidpointRounding.AwayFromZero) & "% | " & Math.Round(intRCI2, MidpointRounding.AwayFromZero) & "%"
+                Else
+                    ' Si no se proporciona tasa de referencia, no hacer cálculo
+                    strDetalle = "Para LIP DIRECTO se requiere proporcionar la Tasa de Referencia LIP"
+                    ' Inicializar valores en 0 para evitar errores
+                    dcmCuota = 0
+                    dcmTotalCuotasDirectas = 0
+                    intRCI1 = 0
+                    intRCI2 = 0
                 End If
-
-                strValorDiferente = dcmLIPFHA1 & " | " & dcmLIPFHA2
-                strRCIDiferente = Math.Round(intRCI1, MidpointRounding.AwayFromZero) & "% | " & Math.Round(intRCI2, MidpointRounding.AwayFromZero) & "%"
-
-            ElseIf String.Equals(strTipoGarantia, "LIP DIRECTO", StringComparison.OrdinalIgnoreCase) Then
-                Dim tasaBanco = dcmTasaInteres
-                Dim tasaReferencia = 5.89 'Preguntar de donde se obtiene
-                Dim tasa1al48 = (tasaBanco / 100) - (40 / 100) * (tasaReferencia / 100)
-                'Dim dcmConVida As Decimal
-                Dim dcmValorConstruccion As Decimal
-
-                cuotaSinSeguro = CalcularPago((tasaBanco / 100) / 12, intPlazoMeses, dcmMontoSolicitado)
-                Dim interesCliente = Math.Round(dcmMontoSolicitado * tasa1al48 / 12, 2)
-                Dim interesSubsidio = Math.Round(dcmMontoSolicitado * tasaBanco / 100 / 12, 2) - interesCliente
-                Dim seguro = 0.32 / 100 * dcmValorConstruccion / 12
-                Dim vida = 0.0051072 * dcmMontoSolicitado / 12
-                Dim capital = cuotaSinSeguro - interesCliente - interesSubsidio
-                Dim pagoTotal = capital + interesCliente + interesSubsidio + vida + seguro
-                Dim pagoCliente = pagoTotal - interesSubsidio
-
-                dcmLIPDIRECTO1 = pagoCliente + dcmEndeudamientoDirecto
-                dcmLIPDIRECTO2 = pagoTotal + dcmEndeudamientoDirecto
-                intRCI1 = (dcmLIPDIRECTO1 / dcmTotalSalarios) * 100
-                intRCI2 = (dcmLIPDIRECTO2 / dcmTotalSalarios) * 100
-                strDetalle = ""
-
-                If intRCI1 > 50 Then
-                    strDetalle += "ALTO RCI INICIAL"
-                End If
-                If intRCI2 > 65 Then
-                    strDetalle += " | ALTO RCI DESPUES DEL SUBSIDIO"
-                End If
-
-                strValorDiferente = dcmLIPDIRECTO1 & " | " & dcmLIPDIRECTO2
-                strRCIDiferente = Math.Round(intRCI1, MidpointRounding.AwayFromZero) & "% | " & Math.Round(intRCI2, MidpointRounding.AwayFromZero) & "%"
 
             Else
-                seguros = PolizadeSeguro(dcmMontoSolicitado, strConstrucciones, dcmTasaInteres, strTipoGarantia)
-                dcmCuota = cuotaSinSeguro
+                seguros = PolizadeSeguro(dcmMontoSolicitado, construcciones.ToString(), dcmTasaInteres, strTipoGarantia)
+                dcmCuota = Math.Round(cuotaSinSeguro, 2)
                 dcmTotalCuotasDirectas = Math.Round(dcmCuota + dcmEndeudamientoDirecto + seguros.SeguroVida + seguros.SeguroDanios, 2)
 
                 intRCI1 = (dcmTotalCuotasDirectas / dcmTotalSalarios) * 100
@@ -458,17 +759,8 @@ Public Class PrecalificacionCreditos
                 End If
             End If
 
-            ' Validación de ingresos verificados
-            Dim dcmIngresosVerificados As Decimal = 0
-            If Not String.IsNullOrEmpty(strMes1) Then
-                dcmIngresosVerificados += Convert.ToDecimal(strMes1)
-            End If
-            If Not String.IsNullOrEmpty(strMes2) Then
-                dcmIngresosVerificados += Convert.ToDecimal(strMes2)
-            End If
-            If Not String.IsNullOrEmpty(strMes3) Then
-                dcmIngresosVerificados += Convert.ToDecimal(strMes3)
-            End If
+            ' Validación de ingresos verificados usando valores validados
+            Dim dcmIngresosVerificados As Decimal = mes1 + mes2 + mes3
 
             Dim dcmPromedio = dcmIngresosVerificados / 3
             Dim dcmValidacionIngresos = Math.Round((dcmPromedio / dcmTotalSalarios) * 100, MidpointRounding.AwayFromZero)
@@ -477,10 +769,8 @@ Public Class PrecalificacionCreditos
                 strDetalle += " | Los ingresos no se comprueban en estados de cuenta"
             End If
 
-            ' Validación de garantía
-            If Not String.IsNullOrEmpty(strConstrucciones) Then
-                dcmValorGarantia = Convert.ToDecimal(strConstrucciones)
-            End If
+            ' Validación de garantía usando valores validados
+            dcmValorGarantia = construcciones
 
             If dcmValorGarantia <> 0 Then
                 dcmRDG = Math.Round(dcmMontoSolicitado / dcmValorGarantia * 100, MidpointRounding.AwayFromZero)
@@ -495,14 +785,9 @@ Public Class PrecalificacionCreditos
                 dcmValorEGarantiaHipotecaria = Math.Round(dcmMontoSolicitado * 100 / 80, 2)
             End If
 
-            ' Validación de hipoteca
+            ' Validación de hipoteca usando valores validados
             Dim dcmHipoteca As Decimal = 0
-            If Not String.IsNullOrEmpty(strTerreno) Then
-                dcmValorGarantia += Convert.ToDecimal(strTerreno)
-            End If
-            If Not String.IsNullOrEmpty(strConstrucciones) Then
-                dcmValorGarantia += Convert.ToDecimal(strConstrucciones)
-            End If
+            dcmValorGarantia = terreno + construcciones
             If dcmValorGarantia <> 0 Then
                 dcmHipoteca = (dcmMontoSolicitado / dcmValorGarantia) * 100
             End If
@@ -528,17 +813,29 @@ Public Class PrecalificacionCreditos
                                    <rdg>{dcmRDG}%</rdg>
                                    <valorDiferente>{strValorDiferente}</valorDiferente>
                                    <rciDiferente>{strRCIDiferente}</rciDiferente>
+                                   <rci1al48>{Math.Round(intRCI1al48, MidpointRounding.AwayFromZero)}%</rci1al48>
+                                   <rci1al48Total>{Math.Round(intRCI1al48Total, MidpointRounding.AwayFromZero)}%</rci1al48Total>
+                                   <rci49al84>{Math.Round(intRCI49al84, MidpointRounding.AwayFromZero)}%</rci49al84>
+                                   <rci49al84Total>{Math.Round(intRCI49al84Total, MidpointRounding.AwayFromZero)}%</rci49al84Total>
+                                   <rci85mas>{Math.Round(intRCI85mas, MidpointRounding.AwayFromZero)}%</rci85mas>
+                                   <rci85masTotal>{Math.Round(intRCI85masTotal, MidpointRounding.AwayFromZero)}%</rci85masTotal>
+                                   <cuota1al48Cliente>{If(intPlazoMeses >= 1, Math.Round(If(String.Equals(strDestinoCredito, "LIP FHA", StringComparison.OrdinalIgnoreCase), dcmLIPFHA1al48, dcmLIPDIRECTO1al48), 2), "")}</cuota1al48Cliente>
+                                   <cuota1al48Total>{If(intPlazoMeses >= 1, Math.Round(If(String.Equals(strDestinoCredito, "LIP FHA", StringComparison.OrdinalIgnoreCase), dcmLIPFHA1al48Total, dcmLIPDIRECTO1al48Total), 2), "")}</cuota1al48Total>
+                                   <cuota49al84Cliente>{If(intPlazoMeses > 48, Math.Round(If(String.Equals(strDestinoCredito, "LIP FHA", StringComparison.OrdinalIgnoreCase), dcmLIPFHA49al84, dcmLIPDIRECTO49al84), 2), "")}</cuota49al84Cliente>
+                                   <cuota49al84Total>{If(intPlazoMeses > 48, Math.Round(If(String.Equals(strDestinoCredito, "LIP FHA", StringComparison.OrdinalIgnoreCase), dcmLIPFHA49al84Total, dcmLIPDIRECTO49al84Total), 2), "")}</cuota49al84Total>
+                                   <cuota85masCliente>{If(intPlazoMeses > 84, Math.Round(If(String.Equals(strDestinoCredito, "LIP FHA", StringComparison.OrdinalIgnoreCase), dcmLIPFHA85mas, dcmLIPDIRECTO85mas), 2), "")}</cuota85masCliente>
+                                   <cuota85masTotal>{If(intPlazoMeses > 84, Math.Round(If(String.Equals(strDestinoCredito, "LIP FHA", StringComparison.OrdinalIgnoreCase), dcmLIPFHA85masTotal, dcmLIPDIRECTO85masTotal), 2), "")}</cuota85masTotal>
                                    <trfLip></trfLip>
                                    <detalle>{strDetalle}</detalle>
                                    <plazoAdvertencia>{strPlazoAdvertencia}</plazoAdvertencia>
                                    <endeudamientoInterno>{Math.Round(dcmEndeudamientoInterno, 2)}</endeudamientoInterno>
                                    <endeudamientoExterno>{Math.Round(dcmEndeudamientoExterno, 2)}</endeudamientoExterno>
-                                   <endeudamiento1>{If(String.IsNullOrEmpty(strTipoDeuda1), "", Math.Round(endeudamiento1, 2).ToString())}</endeudamiento1>
-                                   <endeudamiento2>{If(String.IsNullOrEmpty(strTipoDeuda2), "", Math.Round(endeudamiento2, 2).ToString())}</endeudamiento2>
-                                   <endeudamiento3>{If(String.IsNullOrEmpty(strTipoDeuda3), "", Math.Round(endeudamiento3, 2).ToString())}</endeudamiento3>
-                                   <endeudamiento4>{If(String.IsNullOrEmpty(strTipoDeuda4), "", Math.Round(endeudamiento4, 2).ToString())}</endeudamiento4>
-                                   <endeudamiento5>{If(String.IsNullOrEmpty(strTipoDeuda5), "", Math.Round(endeudamiento5, 2).ToString())}</endeudamiento5>
-                                   <endeudamiento6>{If(String.IsNullOrEmpty(strTipoDeuda6), "", Math.Round(endeudamiento6, 2).ToString())}</endeudamiento6>
+                                   <endeudamiento1>{If(String.IsNullOrEmpty(deudasValidadas(0)("Tipo").ToString()), "", Math.Round(SumaEndeudamientoDirecto(deudasValidadas(0)("Tipo").ToString(), deudasValidadas(0)("Saldo").ToString(), deudasValidadas(0)("Limite").ToString(), deudasValidadas(0)("Cuota").ToString()), 2).ToString())}</endeudamiento1>
+                                   <endeudamiento2>{If(String.IsNullOrEmpty(deudasValidadas(1)("Tipo").ToString()), "", Math.Round(SumaEndeudamientoDirecto(deudasValidadas(1)("Tipo").ToString(), deudasValidadas(1)("Saldo").ToString(), deudasValidadas(1)("Limite").ToString(), deudasValidadas(1)("Cuota").ToString()), 2).ToString())}</endeudamiento2>
+                                   <endeudamiento3>{If(String.IsNullOrEmpty(deudasValidadas(2)("Tipo").ToString()), "", Math.Round(SumaEndeudamientoDirecto(deudasValidadas(2)("Tipo").ToString(), deudasValidadas(2)("Saldo").ToString(), deudasValidadas(2)("Limite").ToString(), deudasValidadas(2)("Cuota").ToString()), 2).ToString())}</endeudamiento3>
+                                   <endeudamiento4>{If(String.IsNullOrEmpty(deudasValidadas(3)("Tipo").ToString()), "", Math.Round(SumaEndeudamientoDirecto(deudasValidadas(3)("Tipo").ToString(), deudasValidadas(3)("Saldo").ToString(), deudasValidadas(3)("Limite").ToString(), deudasValidadas(3)("Cuota").ToString()), 2).ToString())}</endeudamiento4>
+                                   <endeudamiento5>{If(String.IsNullOrEmpty(deudasValidadas(4)("Tipo").ToString()), "", Math.Round(SumaEndeudamientoDirecto(deudasValidadas(4)("Tipo").ToString(), deudasValidadas(4)("Saldo").ToString(), deudasValidadas(4)("Limite").ToString(), deudasValidadas(4)("Cuota").ToString()), 2).ToString())}</endeudamiento5>
+                                   <endeudamiento6>{If(String.IsNullOrEmpty(deudasValidadas(5)("Tipo").ToString()), "", Math.Round(SumaEndeudamientoDirecto(deudasValidadas(5)("Tipo").ToString(), deudasValidadas(5)("Saldo").ToString(), deudasValidadas(5)("Limite").ToString(), deudasValidadas(5)("Cuota").ToString()), 2).ToString())}</endeudamiento6>
                                    <seguroVida>{Math.Round(seguros.SeguroVida, 2)}</seguroVida>
                                    <seguroDanios>{Math.Round(seguros.SeguroDanios, 2)}</seguroDanios>
                                </Root>")
@@ -635,7 +932,7 @@ Public Class PrecalificacionCreditos
         End If
 
         If Not String.IsNullOrEmpty(strTipoDeuda) Then
-            If Not String.IsNullOrEmpty(strCuotaDeuda) Then
+            If Not String.IsNullOrEmpty(strCuotaDeuda) And strCuotaDeuda <> "0" Then
                 dcmEndeudamientoDirecto = Convert.ToDecimal(strCuotaDeuda)
             ElseIf Not String.IsNullOrEmpty(strSaldoDeuda) Then
                 dcmEndeudamientoDirecto = CalcularCuotaDeudaXTipoDeuda(strTipoDeuda, Convert.ToDecimal(strSaldoDeuda), Convert.ToDecimal(strLimiteTarjeta))
